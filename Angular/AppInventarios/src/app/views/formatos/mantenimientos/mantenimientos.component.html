@@ -1,0 +1,173 @@
+<div class="view-header">
+  <div class="header-top">
+    <div class="header-info">
+      <h1>Mantenimientos</h1>
+      <p>Registra los mantenimientos de los equipos y el registro del último mantenimiento</p>
+    </div>
+  </div>
+</div>
+
+<div class="ubicaciones-container">
+  <div *ngFor="let piso of ubicaciones" class="piso-card" [ngClass]="{ 'no-devices': isPisoSinDispositivos(piso) }">
+    <div class="piso-header">
+      <strong>{{ piso.name }}</strong>
+    </div>
+
+    <div class="equipo-list">
+      <div *ngFor="let area of piso.areas" class="area-card" [ngClass]="{ 'no-devices': area.devices.length === 0 }">
+        <div class="area-header">
+          <strong>{{ area.name }}</strong>
+        </div>
+
+        <div class="equipo-list">
+          <div *ngFor="let grupo of objectKeys(area.groupedDevices)">
+            <div class="departamento-header">
+  <span>{{ grupo }}</span>
+  <div class="departamento-actions">
+    <span class="fecha-mantenimiento">
+
+      <p 
+        class="ultimo-texto" 
+        [ngStyle]="{
+          'color': !area.groupedDevices[grupo]?.ultimo ? '#777' : 
+                  (area.groupedDevices[grupo]?.completo === 1 ? 'green' : '#7D3F04')
+        }"
+      >
+        Último: 
+        <ng-container *ngIf="area.groupedDevices[grupo]?.ultimo; else sinRegistro">
+          {{ area.groupedDevices[grupo].ultimo | date:'dd/MM/yyyy' }}
+          <span *ngIf="area.groupedDevices[grupo]?.completo === 0"> : PARCIAL</span>
+        </ng-container>
+        <ng-template #sinRegistro>Sin registro</ng-template>
+      </p>
+
+
+    </span>
+    <button class="mantenimiento-btn"
+      (click)="abrirModalMantenimiento(piso, area, grupo)">
+      Iniciar Mantenimiento
+    </button>
+  </div>
+</div>
+
+            <table class="mantenimiento-table">
+              <thead>
+                <tr>
+                  <th>Categoría</th>
+                  <th>Marca</th>
+                  <th>Modelo</th>
+                  <th>N° Serie</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let device of area.groupedDevices[grupo]">
+                  <td>{{ device.category }}</td>
+                  <td>{{ device.brand }}</td>
+                  <td>{{ device.model }}</td>
+                  <td>{{ device.serial_number }}</td>
+                  <td>{{ device.responsable }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="ubicaciones.length === 0">
+    <p>No se encontraron ubicaciones registradas.</p>
+  </div>
+</div>
+
+<!-- Modal Mantenimiento -->
+<div class="modal-backdrop" *ngIf="showModal">
+  <div class="detail-modal-container" (click)="$event.stopPropagation()">
+
+    <!-- Encabezado -->
+    <div class="modal-header">
+      Registrar Mantenimiento
+      <button class="close-btn" (click)="showModal = false">×</button>
+    </div>
+
+    <!-- Cuerpo -->
+    <div class="modal-body">
+      <form (ngSubmit)="registrarMantenimiento()">
+
+        <!-- Fila 1: Información general -->
+        <div class="fila-info-general">
+          <p><strong>Piso:</strong> <br> {{ selectedPiso?.name }}</p>
+          <p><strong>Área:</strong> <br> {{ selectedArea?.name }}</p>
+          <p><strong>Departamento:</strong> <br> {{ selectedArea?.departamento}}</p>
+          <p><strong>Responsable:</strong> <br> {{ nombreResponsable }}</p>
+        </div>
+
+        <!-- Fila 2: Checkboxes y campos de texto -->
+        <div class="fila-principal">
+          <!-- Columna izquierda: checkboxes -->
+          <div class="col-izquierda">
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="formMantenimiento.hardware" name="hardware" />
+                Mantenimiento de Hardware
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" [(ngModel)]="formMantenimiento.software" name="software" />
+                Mantenimiento de Software
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label>Checklist de Dispositivos</label>
+              <div *ngFor="let d of selectedGrupo" class="device-check">
+                <label class="checkbox-label">
+                  <input
+                    type="checkbox"
+                    [checked]="d.estado === 'completo'"
+                    (change)="marcarEstado(d, $event)"
+                    [name]="'check_' + d.id"
+                  />
+                  <span class="check-text">
+                    {{ d.brand }} - {{ d.model }} ({{ d.serial_number }})
+                  </span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Columna derecha: campos de texto -->
+          <div class="col-derecha">
+            <div class="form-group">
+              <label>Descripción de la Falla</label>
+              <textarea [(ngModel)]="formMantenimiento.descripcion_falla" name="descripcion_falla"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Descripción de la Solución</label>
+              <textarea [(ngModel)]="formMantenimiento.descripcion_solucion" name="descripcion_solucion"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fila 3: Alerta + Botones -->
+        <div class="fila-final">
+          <div class="alert-message" *ngIf="!todosCompletos()">
+            ⚠️ Si no se marcan <strong>todos los departamentos</strong> el mantenimiento se guardará como parcial.
+          </div>
+
+          <div class="form-buttons">
+            <button type="submit" class="btn-green">Guardar</button>
+            <button type="button" class="btn-yellow" (click)="showModal = false">Cancelar</button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>
+
+

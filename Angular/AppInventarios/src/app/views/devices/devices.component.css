@@ -1,0 +1,517 @@
+/* ===============================
+   1. CONTENEDOR PRINCIPAL DEL HEADER
+================================== */
+.view-header {
+  width: 90%;
+  margin-left: 70px;
+  color: #00234b;
+  margin-top: 3vh;
+}
+
+.view-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.view-header p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* ===============================
+   2. FILTROS DE BÚSQUEDA (Categoría / Función)
+================================== */
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.header-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 300px;
+  margin-top: 3vh;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-container label {
+  font-weight: bold;
+  width: 150px;
+}
+
+.filter-container select {
+  width: 150px;
+  background-color: #ffffff;
+  color: #00234b;
+  border-radius: 5px;
+  border: 1px solid #aacbee;
+  flex: 1;
+}
+
+.filter-container select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+
+/* ===============================
+   3. LISTADO DE EQUIPOS Y TARJETAS
+================================== */
+.list-container {
+  width: 70vw;
+  height: 65vh;
+  margin: auto;
+  margin-top: 1.5vh;
+  background: #f0f7ff;
+  padding: 3%;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+
+.list-content {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.item-card {
+  background: #ffffff;
+  border: 1px solid #aacbee;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.item-card:hover {
+  background: #dbecfe;
+  border-color: #00234b;
+}
+
+.item-card.selected {
+  background: #dbecfe;
+  border-color: #1f2b50;
+  color: #60affa;
+}
+
+.card-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.card-actions {
+  height: 7vh;
+  display: flex;
+  gap: 1.5vw;
+}
+
+.action-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 0.5rem;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.action-btn:hover {
+  transform: scale(1.2);
+}
+
+.icon-action {
+  max-height: 60%;
+  transition: transform 0.3s ease;
+}
+
+.action-btn:hover .icon-action {
+  transform: scale(1.1);
+}
+
+/* ===============================
+   4. BOTÓN FLOTANTE DE NUEVO
+================================== */
+.floating-new-btn {
+  position: fixed;
+  bottom: 5vh;
+  right: 3.5vw;
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 10px 25px;
+  border-radius: 15px;
+  font-size: 1.3rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 998;
+  transition: all 0.3s ease;
+}
+
+.floating-new-btn:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+/* ===============================
+   5. MENSAJE DE NOTIFICACIÓN EMERGENTE
+================================== */
+.message-box {
+  position: fixed;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  z-index: 2000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background-color: #eff7ff;
+  border: 2px solid #93ccfd;
+  text-align: center;
+  color: #00234b;
+  opacity: 0;
+  animation: fadeInMessage 0.3s ease-out forwards;
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.icon-container {
+  margin-bottom: 1rem;
+}
+
+.success .icon {
+  color: #0cc510;
+}
+.error .icon {
+  color: #cf2e2e;
+}
+
+.icon-mess {
+  width: 5rem;
+  height: 5rem;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 1rem auto;
+}
+
+/* ===============================
+   6. ESTILOS DE MODALES (Detalle / Confirmación)
+   — Se ajusta el DETALLE para parecerse al modal de ejemplo:
+   contenedor blanco, bordes 16px, sombra, header azul, body gris claro.
+================================== */
+#confirm-backdrop,
+#detail-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 4000;
+  animation: fadeInConfirm 0.35s ease-out forwards;
+}
+
+@keyframes fadeInConfirm {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Confirmación se mantiene como estaba */
+#confirm-modal {
+  background: #eff7ff;
+  border-radius: 20px;
+  padding: 0;
+  margin: 0 1rem;
+  width: 45vw;
+  max-width: 600px;
+  transform: scale(0.9);
+  animation: scaleInConfirm 0.35s ease-out forwards;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
+}
+
+/* ===== DETALLE AJUSTADO AL NUEVO ESTILO ===== */
+#detail-modal {
+  background: #ffffff;                /* blanco como el ejemplo */
+  border-radius: 16px;                /* borde más moderno */
+  padding: 0;
+  margin: 0 1rem;
+  width: 75%;
+  max-width: 900px;                   /* más ancho */
+  max-height: 90vh;                   /* y más alto */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;                   /* oculta scroll lateral y redondeos */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeInModal 0.3s ease;   /* animación suave */
+}
+
+@keyframes scaleInConfirm {
+  from { transform: scale(0.8); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+
+/* animación del modal de detalle similar al ejemplo */
+@keyframes fadeInModal {
+  from { opacity: 0; transform: translateY(-20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+#confirm-header,
+#detail-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.1rem 1.5rem;            /* más compacto */
+  color: #fff;
+  font-weight: bold;
+  position: relative;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+#confirm-header {
+  background: #d32f2f;
+  font-size: 2rem;
+}
+
+#detail-header {
+  background: #0d47a1;               /* azul del ejemplo */
+  font-size: 1.2rem;                  /* tipografía más discreta */
+}
+
+#confirm-close-btn,
+#detail-close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);        /* centrado vertical real */
+  background: transparent;
+  border: none;
+  font-size: 1.6rem;                  /* un poco menor para el nuevo header */
+  color: #fff;
+  cursor: pointer;
+}
+
+#confirm-body,
+#detail-body {
+  padding: 1.5rem;                    /* padding como el ejemplo */
+  box-sizing: border-box;
+  border-radius: 0 0 16px 16px;
+  font-size: 0.95rem;                 /* tipografía más compacta */
+}
+
+#confirm-body {
+  background: #fff5f5;
+  color: #2d0000;
+  text-align: center;
+}
+
+#detail-body {
+  background: #f8f9fa;                /* gris claro del ejemplo */
+  color: #333;                        /* texto más legible */
+  text-align: left;
+  overflow-y: auto;                   /* scroll vertical si se excede */
+  max-height: calc(90vh - 64px);      /* evita desbordes bajo el header */
+}
+
+#detail-body p {
+  margin-bottom: 0.8rem;              /* separación uniforme */
+  line-height: 1.5;
+  word-break: break-word;
+}
+
+#detail-body h4 {
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #0d47a1;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+#confirm-buttons {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+#confirm-buttons .btn-green,
+#confirm-buttons .btn-yellow {
+  padding: 0.9rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+#confirm-buttons .btn-green {
+  background-color: #d32f2f;
+  color: #fff;
+}
+
+#confirm-buttons .btn-green:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px);
+}
+
+#confirm-buttons .btn-yellow {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+#confirm-buttons .btn-yellow:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
+}
+
+/* ===== Alerta interna dentro del modal de detalle (showBajaAlertOnce) ===== */
+.alert-baja {
+  background-color: #fff6db;
+  border: 2px solid #f0d38a;
+  color: #5c4a00;
+  font-weight: 600;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  margin: 10px 1.5rem 0 1.5rem; /* respeta el padding del body */
+  box-shadow: 0 4px 14px rgba(0,0,0,.08);
+}
+
+/* ===============================
+   7. TAGS DE ESTADO (Func)
+================================== */
+.tag-status {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.tag-status::before {
+  content: "●";
+  margin-right: 6px;
+  font-size: 0.8rem;
+  vertical-align: middle;
+}
+
+.asignado {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.resguardo {
+  background-color: #e2e3e5;
+  color: #383d41;
+}
+
+.baja {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* ===============================
+   8. RESPONSIVE
+================================== */
+@media screen and (max-width: 768px) {
+  .view-header {
+    width: 100%;
+    margin: 1rem auto;
+    text-align: center;
+  }
+
+  .list-container {
+    width: 95vw;
+    margin: 1rem auto;
+    height: auto;
+    padding: 2%;
+  }
+
+  .filter-container {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .filter-container select {
+    width: 100%;
+  }
+
+  .card-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .card-actions {
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+  }
+
+  .floating-new-btn {
+    bottom: 3vh;
+    right: 3vw;
+    padding: 8px 20px;
+    font-size: 1rem;
+  }
+
+  /* Detalle y confirmación responsivo */
+  #confirm-modal,
+  #detail-modal {
+    width: 90vw;
+    max-width: 90vw;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .message-box {
+    top: 5vh;
+    font-size: 0.9rem;
+    padding: 1rem 1.5rem;
+  }
+
+  .view-header h1 {
+    font-size: 1.4rem;
+  }
+
+  .view-header p {
+    font-size: 0.9rem;
+  }
+}
+
+.styled-input{
+  width: 200px; height: 30px; padding: 6px 10px;
+  border: 1px solid #aacbee; border-radius: 8px; background:#fff;
+  outline: none; transition: box-shadow .2s,border-color .2s;
+}
+.styled-input:focus{ border-color:#5aa3f6; box-shadow:0 0 0 3px rgba(90,163,246,.15); }
+

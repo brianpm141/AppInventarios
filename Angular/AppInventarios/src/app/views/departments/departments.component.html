@@ -1,0 +1,128 @@
+<!-- Mensaje emergente unificado -->
+<div
+  *ngIf="showMessage"
+  class="message-box"
+  [ngClass]="{
+    success: messageType === 'success',
+    error:   messageType === 'error',
+    warning: messageType === 'warning'
+  }"
+  role="status"
+  aria-live="polite"
+>
+  <div class="icon-container">
+    <img
+      class="icon-mess"
+      [src]="
+        messageType === 'success' ? 'img/suc.png' :
+        messageType === 'warning' ? 'img/advertencia.png' :
+                                    'img/error.png'
+      "
+      [alt]="
+        messageType === 'success' ? 'Éxito' :
+        messageType === 'warning' ? 'Advertencia' : 'Error'
+      "
+    />
+  </div>
+  <p>{{ messageText }}</p>
+</div>
+
+<!-- Modal de confirmación de borrado -->
+<div *ngIf="showConfirmModal" id="confirm-backdrop" (click)="cancelarEliminacion()">
+  <div id="confirm-modal"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="confirm-title"
+       (click)="$event.stopPropagation()"
+       (keydown.escape)="cancelarEliminacion()">
+    <div id="confirm-header">
+      <h2 id="confirm-title">Confirmar Eliminación</h2>
+      <button id="confirm-close-btn" (click)="cancelarEliminacion()" aria-label="Cerrar">×</button>
+    </div>
+    <div id="confirm-body">
+      <p>¿Está seguro que desea eliminar el departamento <strong>{{ departamentoAEliminar?.name }}</strong>?</p>
+      <div id="confirm-buttons">
+        <button class="btn-yellow" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-green" (click)="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle Departamento -->
+<div *ngIf="showDetailModal" id="detail-backdrop" (click)="cerrarDetalle()">
+  <div id="detail-modal"
+       role="dialog"
+       aria-modal="true"
+       aria-labelledby="detail-title"
+       (click)="$event.stopPropagation()"
+       (keydown.escape)="cerrarDetalle()">
+    <div id="detail-header">
+      <h2 id="detail-title">Detalles del departamento</h2>
+      <button id="detail-close-btn" (click)="cerrarDetalle()" aria-label="Cerrar">×</button>
+    </div>
+    <div id="detail-body">
+      <p><strong>Abreviación:</strong> {{ departamentoSeleccionado?.abbreviation }}</p>
+      <p><strong>Nombre:</strong> {{ departamentoSeleccionado?.name }}</p>
+      <p><strong>Descripción:</strong> {{ departamentoSeleccionado?.description }}</p>
+      <p><strong>Líder:</strong> {{ departamentoSeleccionado?.department_head }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje si no hay departamentos -->
+<div *ngIf="departments.length === 0 && !cargaFallida" class="message-box info">
+  No se detectaron departamentos registrados.
+</div>
+
+<!-- Encabezado -->
+<div class="view-header">
+  <h1>Gestión de Departamentos</h1>
+  <p>Visualiza, registra y administra los departamentos existentes en el sistema.</p>
+</div>
+
+<!-- Lista de departamentos -->
+<div class="list-container">
+  <div class="list-content">
+    <div
+      class="item-card"
+      *ngFor="let dept of departments"
+      [class.selected]="dept === departamentoSeleccionado"
+      (click)="mostrarDetalles(dept)"
+      tabindex="0"
+    >
+      <div class="card-row">
+        <div class="card-info">
+          <div><strong>Dep:</strong> {{ dept.abbreviation }}</div>
+          <div><strong>Nombre:</strong> {{ dept.name }}</div>
+        </div>
+
+        <div class="card-actions">
+          <button class="action-btn" title="Editar" (click)="abrirEditar(dept); $event.stopPropagation()">
+            <img src="icons/editar.png" class="icon-action" alt="Editar" />
+          </button>
+          <button
+            *ngIf="authService.userRole !== 2"
+            (click)="eliminarDepartamento(dept); $event.stopPropagation()"
+            class="action-btn"
+            title="Eliminar"
+          >
+            <img src="icons/borrar.png" class="icon-action" alt="Eliminar" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante -->
+<button class="floating-new-btn" (click)="abrirModal()">Nuevo <br/> Departamento</button>
+
+<!-- Modal de registro/edición -->
+<app-formdepartment
+  *ngIf="showModal"
+  [isVisible]="showModal"
+  [departmentToEdit]="departamentoSeleccionado"
+  (closed)="cerrarModal()"
+  (created)="onCreated()">
+</app-formdepartment>

@@ -1,0 +1,361 @@
+.view-header {
+  width: 90%;
+  margin-left: 50px;
+  color: #00234b;
+}
+
+.view-header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.2rem;
+}
+
+.view-header p {
+  font-size: 0.95rem;
+  color: #444;
+}
+
+.form-section {
+  width: 65vw;
+  margin: 2vh auto;
+  background: #f0f7ff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-section label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #00234b;
+}
+
+.form-section input,
+.form-section select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #aacbee;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.form-section button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.4rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-section button:hover {
+  background-color: #218838;
+}
+
+.cancel-btn {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.cancel-btn:hover {
+  background-color: #e0a800;
+}
+
+.table-section {
+  width: 65vw;
+  margin: 2vh auto;
+  background: #ffffff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.07);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  background-color: #dbecfe;
+  color: #00234b;
+}
+
+thead th {
+  text-align: left;
+  padding: 0.6rem;
+  font-size: 0.85rem;
+}
+
+tbody td {
+  padding: 0.6rem;
+  font-size: 0.85rem;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+tbody tr:hover {
+  background-color: #f0f7ff;
+}
+
+.actions button {
+  background: transparent;
+  border: none;
+  color: #0d47a1;
+  cursor: pointer;
+  margin-right: 8px;
+  font-size: 0.85rem;
+}
+
+.actions button:hover {
+  color: #00234b;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+.message-box {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1.2rem 2rem;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 1rem;
+  z-index: 2000;
+  opacity: 0.95;
+  text-align: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+.success {
+  background-color: #e8fce9;
+  color: #0f7a0f;
+  border: 2px solid #0cc510;
+}
+
+.error {
+  background-color: #ffe5e5;
+  color: #a10000;
+  border: 2px solid #cf2e2e;
+}
+
+.message-box .icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Modal */
+#confirm-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+}
+
+#confirm-modal {
+  background: #fff5f5;
+  border-radius: 16px;
+  width: 80vw;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  animation: scaleInConfirm 0.3s ease-out forwards;
+}
+
+@keyframes scaleInConfirm {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+#confirm-header {
+  background: #d32f2f;
+  color: white;
+  padding: 1rem;
+  border-radius: 16px 16px 0 0;
+  font-weight: bold;
+  font-size: 1.1rem;
+  position: relative;
+  text-align: center;
+}
+
+#confirm-close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: white;
+  cursor: pointer;
+}
+
+#confirm-body {
+  padding: 1.5rem;
+  font-size: 0.95rem;
+  color: #2d0000;
+  text-align: center;
+}
+
+#confirm-buttons {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-green {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background-color: #d32f2f;
+  color: white;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-green:hover {
+  background-color: #b71c1c;
+  transform: translateY(-2px);
+}
+
+.btn-yellow {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: none;
+  background-color: #ffc107;
+  color: #212529;
+  font-weight: 600;
+  transition: 0.3s;
+}
+
+.btn-yellow:hover {
+  background-color: #e0a800;
+  transform: translateY(-2px);
+}
+
+/* ------------------ ESTILO NUEVO ------------------ */
+
+.custom-fields-section {
+  margin-top: 2rem;
+  padding: 1.2rem 1.5rem;
+  background: #fdfdff;
+  border: 1px solid #d6e0f5;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.custom-fields-section h4 {
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #1e3d59;
+  border-bottom: 1px solid #ccd8ef;
+  padding-bottom: 0.5rem;
+}
+
+.custom-field-form {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1rem;
+}
+
+.custom-field-form label {
+  font-weight: 500;
+  font-size: 0.85rem;
+  margin-right: 0.4rem;
+  color: #2a2a2a;
+}
+
+.custom-field-form input[type="text"],
+.custom-field-form select {
+  min-width: 180px;
+}
+
+.custom-field-form button {
+  margin-left: auto;
+  background-color: #007bff;
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.85rem;
+}
+
+.custom-field-form button:hover {
+  background-color: #0056b3;
+}
+
+.custom-field-list table {
+  margin-top: 0.5rem;
+  background: white;
+  border: 1px solid #e1e8f5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.custom-field-list th {
+  background: #eff5ff;
+  font-weight: 600;
+}
+
+.custom-field-list td,
+.custom-field-list th {
+  text-align: left;
+  padding: 0.6rem 0.8rem;
+}
+
+.custom-field-list td {
+  color: #2a2a2a;
+}
+
+.btn-delete-cat {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.btn-delete-cat img.icon {
+  height: 20px;
+  opacity: 0.7;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.btn-delete-cat:hover img.icon {
+  transform: scale(1.1);
+  opacity: 1;
+}
+
+.icon {
+  height: 0.8vw;
+  width: auto;
+  transition: transform 0.3s ease;
+  min-height: 20px;
+}

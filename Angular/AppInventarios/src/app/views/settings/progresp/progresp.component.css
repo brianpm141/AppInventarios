@@ -1,0 +1,73 @@
+.backup-settings-container {
+  max-width: 500px;
+  margin: 2vh auto;
+  padding: 2rem;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  color: #00234b;
+}
+
+.backup-settings-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.4rem;
+  color: #0d47a1;
+}
+
+.field {
+  margin-bottom: 1.2rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.4rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+select,
+input[type="number"] {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #aacbee;
+  font-size: 0.95rem;
+  background-color: #fff;
+  box-sizing: border-box;
+}
+
+.hora-picker {
+  display: flex;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.hora-picker select {
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+button {
+  width: 100%;
+  padding: 0.7rem 1rem;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #125ca1;
+}
+
+p {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #333;
+  font-size: 0.9rem;
+}

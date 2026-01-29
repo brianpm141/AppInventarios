@@ -1,0 +1,133 @@
+/* === Backdrop (igual que detalles) === */
+.modal-backdrop {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  backdrop-filter: blur(5px);
+  display: flex; justify-content: center; align-items: center;
+  z-index: 4000; animation: fadeInBackdrop .35s ease-out forwards;
+}
+@keyframes fadeInBackdrop { from{opacity:0} to{opacity:1} }
+
+/* === Contenedor principal (blanco, radios 16, sombra, overflow oculto) === */
+.modal-content {
+  background: #ffffff;
+  border-radius: 16px;
+  width: 75%; max-width: 900px; max-height: 90vh;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+  animation: fadeInModal .3s ease;
+}
+@keyframes fadeInModal { from{opacity:0; transform:translateY(-20px)} to{opacity:1; transform:none} }
+
+/* === Header (azul, tipografía blanca, botón cerrar flotante) === */
+.modal-header {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; gap: .75rem;
+  padding: 1.1rem 1.5rem;
+  background: #0d47a1; color: #fff; font-weight: 700; font-size: 1.2rem;
+  border-top-left-radius: 16px; border-top-right-radius: 16px;
+}
+.modal-header h2 { margin: 0; font-size: inherit; font-weight: inherit; }
+.close-btn {
+  position: absolute; right: 1rem; top: 50%; transform: translateY(-50%);
+  background: transparent; border: none; font-size: 1.6rem; color: #fff; cursor: pointer;
+}
+
+/* === Tag de estado (mismo set que detalles) === */
+.tag-status {
+  display: inline-block; padding: 4px 10px; border-radius: 8px;
+  font-weight: 700; font-size: .9rem;
+}
+.tag-status::before { content:"●"; margin-right:6px; font-size:.8rem; vertical-align:middle; }
+.asignado { background:#d4edda; color:#155724; }
+.resguardo { background:#e2e3e5; color:#383d41; }
+.baja { background:#f8d7da; color:#721c24; }
+
+/* === Body del modal (gris claro, scroll vertical) === */
+.form-container {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 0 0 16px 16px;
+  overflow-y: auto;
+  max-height: calc(90vh - 64px); /* evita desbordes bajo el header */
+  box-sizing: border-box;
+}
+
+/* === Form grid === */
+form { width: 100%; }
+.form-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-bottom: 1rem; }
+.form-row.single-row { flex-wrap: nowrap; gap: 1.25rem; }
+.form-row.single-row .form-group { flex: 1; min-width: 0; }
+.form-group { flex: 1 1 45%; min-width: 240px; }
+
+/* === Controles (paleta y focus consistentes) === */
+label { display: block; margin: 0 0 .45rem; font-weight: 600; color:#0d47a1; }
+input, textarea, select {
+  width: 100%; padding: .85rem 1rem; border-radius: 12px; box-sizing: border-box;
+  border: 1px solid #d9e5f4; background: #fff; color: #333; font-size: 1rem; font-family: inherit;
+  transition: border-color .2s, box-shadow .2s, background-color .2s;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: #60affa; box-shadow: 0 0 0 3px rgba(96,175,250,.25); outline: none;
+}
+textarea { height: 120px; resize: none; }
+select {
+  appearance: none; -webkit-appearance: none; -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg fill='gray' height='20' viewBox='0 0 24 24' width='20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 1rem center; background-size: 1rem; padding-right: 2.5rem;
+}
+
+/* === Mensajes de error (discretos, centrados) === */
+.error { color: #cf2e2e; text-align: center; margin-top: .4rem; }
+.error small {
+  display: inline-block; background: #fff5f5; border: 1px solid #f1b5b5;
+  padding: .35rem .6rem; border-radius: 10px; font-weight: 600;
+}
+
+/* === Botones (mismo estilo que detalles/confirmación) === */
+.form-buttons {
+  display: flex; justify-content: center; gap: 1rem; margin-top: 1.25rem; flex-wrap: wrap;
+}
+.btn-green, .btn-yellow {
+  min-width: 140px; max-width: 220px; padding: .9rem 1.5rem; border: none; border-radius: 12px;
+  font-weight: 700; cursor: pointer; text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,.1); transition: transform .2s, background-color .2s;
+}
+.btn-green { background: #28a745; color: #fff; }
+.btn-green:hover { background: #218838; transform: translateY(-2px); }
+.btn-yellow { background: #ffc107; color: #212529; }
+.btn-yellow:hover { background: #e0a800; transform: translateY(-2px); }
+
+/* === Toggle "equipo nuevo" alineado con paleta === */
+.switch {
+  --circle-dim: 1.4em; font-size: 17px; position: relative; display: inline-block;
+  width: 3.5em; height: 2em; vertical-align: middle; margin-left: 10px;
+}
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider {
+  position: absolute; inset: 0; cursor: pointer; border-radius: 30px;
+  background-color: #e8eef9; transition: .4s; border: 1px solid #cfe0fb;
+}
+.slider-card {
+  position: absolute; height: var(--circle-dim); width: var(--circle-dim); border-radius: 50%;
+  left: .3em; bottom: .3em; transition: .4s; pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0,0,0,.15);
+}
+.slider-card-face { position: absolute; inset: 0; border-radius: 50%; backface-visibility: hidden; transition: .4s transform; }
+.slider-card-front { background-color: #dc3535; }
+.slider-card-back { background-color: #379237; transform: rotateY(180deg); }
+.switch input:checked ~ .slider-card .slider-card-back { transform: rotateY(0); }
+.switch input:checked ~ .slider-card .slider-card-front { transform: rotateY(-180deg); }
+.switch input:checked ~ .slider-card { transform: translateX(1.5em); }
+.switch input:checked ~ .slider { background-color: #e7f3ff; border-color: #60affa; }
+
+/* === Responsive === */
+@media (max-width: 900px) {
+  .modal-content { width: 90vw; max-width: 90vw; }
+}
+@media (max-width: 600px) {
+  .form-row, .form-row.single-row { flex-direction: column; gap: 1rem; }
+  .form-group { min-width: 100%; }
+  .modal-header { text-align: center; }
+}

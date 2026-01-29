@@ -1,0 +1,66 @@
+services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    env_file: .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE:     ${MYSQL_DATABASE}
+      MYSQL_USER:         ${MYSQL_USER}
+      MYSQL_PASSWORD:     ${MYSQL_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./DataBase/initdb:/docker-entrypoint-initdb.d:ro
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./Api
+      dockerfile: Dockerfile
+    restart: always
+    env_file: .env
+    ports:
+      - "${API_HOST_PORT}:3000"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - backend
+      - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:3000/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  angular:
+    build:
+      context: ./Angular
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "${ANGULAR_HOST_PORT}:80"
+    depends_on:
+      - api 
+    networks:
+      - frontend
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mysql_data:
+
+networks:
+  backend:
+    driver: bridge
+  frontend:
+    driver: bridge

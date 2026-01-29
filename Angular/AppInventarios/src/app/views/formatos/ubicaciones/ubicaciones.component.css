@@ -1,0 +1,205 @@
+/* === HEADER === */
+.view-header {
+  width: 90%;
+  margin-left: 70px;
+  color: #00234b;
+  margin-top: 1vh;
+}
+
+.view-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.view-header p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.header-info {
+  flex: 1;
+  min-width: 250px;
+}
+
+.header-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 300px;
+  margin-top: 3vh;
+}
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-container label {
+  font-weight: bold;
+  width: 150px;
+}
+
+.filter-container select {
+  width: 150px;
+  background-color: #ffffff;
+  color: #00234b;
+  border-radius: 5px;
+  border: 1px solid #aacbee;
+  flex: 1;
+}
+
+.filter-container select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+}
+
+/* === LISTA DE UBICACIONES === */
+.ubicaciones-container {
+  width: 90%;
+  margin: 2rem auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.piso-card {
+  background: #e6f0fa;
+  border: 1px solid #99c2e0;
+  border-radius: 10px;
+  padding: 1rem;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.piso-card:hover {
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.piso-header {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #003366;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.piso-card.no-devices {
+  background: #e0e0e0;
+  border: 1px solid #b0b0b0;
+  color: #777;
+}
+
+.piso-header.no-toggle {
+  cursor: default;
+  color: #999;
+}
+
+.piso-header.no-toggle:hover {
+  transform: none;
+}
+
+.area-card {
+  background: #ffffff;
+  border: 1px solid #cce0f5;
+  border-radius: 8px;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.area-card:hover {
+  background: #f5faff;
+  transform: translateX(3px);
+}
+
+.area-card.no-devices {
+  background: #e0e0e0;
+  border: 1px solid #b0b0b0;
+  color: #777;
+}
+
+.area-header {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #00509e;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.area-header.no-toggle {
+  cursor: default;
+  color: #999;
+}
+
+.area-header.no-toggle:hover {
+  transform: none;
+}
+
+.equipo-list {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  overflow: hidden;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  opacity: 1;
+}
+
+.equipo-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem;
+  background: #f0f7ff;
+  border-radius: 5px;
+  margin-bottom: 0.3rem;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+
+.equipo-row:hover {
+  background: #d9ebff;
+}
+
+.collapse-hidden {
+  max-height: 0;
+  opacity: 0;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.piso-card,
+.area-card {
+  cursor: pointer;
+}
+
+.piso-card.no-devices,
+.area-card.no-devices {
+  cursor: default;
+}
+
+.btn-green {
+  background-color: #28a745;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-top: 1vh;
+}
+
+.btn-green:hover {
+  background-color: #218838;
+}

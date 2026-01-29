@@ -1,0 +1,620 @@
+/* ======================================
+   1. ENCABEZADO PRINCIPAL
+====================================== */
+.view-header {
+  width: 90%;
+  margin-left: 50px;
+  color: #00234b;
+}
+
+.view-header h1 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}
+
+/* ======================================
+   2. SECCIÓN DE FORMULARIO
+====================================== */
+.form-section {
+  width: 90%;
+  margin: 2vh auto;
+  background: #f0f7ff;
+  padding: 1.5rem;
+  border-radius: 10px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+.form-section form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 20%;
+  min-width: 200px;
+}
+
+.form-section label {
+  font-size: 0.9rem;
+  font-weight: bold;
+  color: #00234b;
+  margin-bottom: 0.3rem;
+}
+
+.form-section input,
+.form-section select {
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #aacbee;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.form-section button {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.form-section button:hover {
+  background-color: #218838;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* ======================================
+   3. TABLA DE DISPOSITIVOS
+====================================== */
+.form-section table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+}
+
+.form-section thead {
+  background-color: #dbecfe;
+  color: #00234b;
+}
+
+.form-section th,
+.form-section td {
+  padding: 0.6rem;
+  font-size: 0.85rem;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.form-section tbody tr:hover {
+  background-color: #f0f7ff;
+}
+
+/* ======================================
+   4. RESPONSIVE FORMULARIO
+====================================== */
+@media (max-width: 768px) {
+  .form-section {
+    width: 95%;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .form-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .subir-doc-contenedor {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+/* ======================================
+   5. BUSCADOR Y RESULTADOS
+====================================== */
+.buscador-container {
+  position: relative;
+}
+
+.input-busqueda {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #aacbee;
+  border-radius: 8px;
+  transition: box-shadow 0.3s;
+  font-size: 1rem;
+}
+
+.input-busqueda:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.4);
+}
+
+.buscador-resultados {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border: 1px solid #aacbee;
+  border-top: none;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.buscador-resultados li {
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.buscador-resultados li:hover {
+  background-color: #f0f7ff;
+}
+
+/* ======================================
+   6. MODAL GENERAL (BACKDROP)
+====================================== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 5000;
+}
+
+/* ======================================
+   7. MODAL PREVISUALIZACIÓN
+====================================== */
+.preview-modal-container {
+  background: #fff;
+  border-radius: 12px;
+  width: 95%;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  animation: fadeInModal 0.3s ease;
+}
+
+.preview-iframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 8px;
+  margin-top: 1rem;
+}
+
+/* ======================================
+   8. MODAL DETALLE DE RESPONSIVA
+====================================== */
+.detail-modal-container {
+  background: #fff;
+  border-radius: 16px;
+  width: 75%;
+  max-width: 900px;
+  height: auto;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  animation: fadeInModal 0.3s ease;
+}
+
+.modal-header {
+  background: #0d47a1;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #00234b;
+}
+
+.modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background: #f8f9fa;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.modal-body p {
+  margin-bottom: 0.8rem;
+  line-height: 1.5;
+}
+
+.modal-body h4 {
+  margin-top: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #0d47a1;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+.modal-body ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.modal-body li {
+  margin-bottom: 0.5rem;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f1f1f1;
+}
+
+/* ======================================
+   9. ANIMACIÓN MODAL
+====================================== */
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ======================================
+   10. MENSAJE FLOTANTE
+====================================== */
+.floating-message {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  background: #28a745;
+  color: white;
+  padding: 0.8rem 1.2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 6000;
+  animation: fadeOut 3s forwards;
+}
+
+.floating-message.error {
+  background: #dc3545;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}
+
+/* ======================================
+   11. BOTONES
+====================================== */
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.confirm-btn {
+  background: linear-gradient(45deg, #28a745, #218838);
+  color: white;
+  min-width: 160px;
+}
+
+.cancel-btn {
+  background: linear-gradient(45deg, #dc3545, #c82333);
+  color: white;
+  min-width: 160px;
+}
+
+.warning-btn {
+  background: linear-gradient(45deg, #ffc107, #e0a800);
+  color: #212529;
+}
+
+/* Botón azul personalizado */
+.primary-btn {
+  background: linear-gradient(45deg, #007bff, #0056b3);
+  color: white;
+  font-size: 0.85rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 8px;
+  font-weight: bold;
+  min-width: auto;
+}
+
+.primary-btn:hover,
+.confirm-btn:hover,
+.cancel-btn:hover,
+.warning-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+/* ======================================
+   12. OTROS
+====================================== */
+.documento-nombre {
+  font-style: italic;
+  color: #555;
+  margin-bottom: 1rem;
+}
+
+.acciones-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.subir-doc-contenedor {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.input-archivo {
+  border: 1px solid #ccc;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  background: #fff;
+  max-width: 180px;
+}
+
+.doc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f5f5f5;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+}
+
+.doc-header .documento-nombre {
+  margin: 0;
+  font-style: italic;
+  font-size: 0.9rem;
+  color: #333;
+  flex: 1;
+  word-break: break-word;
+}
+
+/* Backdrop específico: más suave y con blur */
+.category-backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+/* Contenedor del modal de categoría: esquinas, sombra y animación */
+.category-modal {
+  width: 520px;
+  max-width: 92vw;
+  border-radius: 18px;               /* más redondeado */
+  box-shadow: 0 14px 40px rgba(0,0,0,.25);
+  overflow: hidden;
+  animation: catModalIn .22s ease-out both;
+}
+.category-modal.closing {
+  animation: catModalOut .20s ease-in both;
+}
+
+/* Encabezado más compacto */
+.category-header {
+  background: linear-gradient(180deg, #0d47a1 0%, #0b3b87 100%);
+  padding: .8rem 1.2rem;            /* más compacto que 1rem 1.5rem */
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+.category-header h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;                /* título más pequeño */
+  letter-spacing: .2px;
+}
+
+/* Cuerpo y acciones */
+.category-modal .modal-body {
+  padding: 1.1rem 1.2rem;
+  background: #ffffff;
+  font-size: .95rem;                /* texto un poco más pequeño */
+  color: #2b2b2b;
+}
+.category-actions {
+  background: #f6f8fb;
+  padding: .9rem 1.2rem;
+  display: flex;
+  gap: .8rem;
+  justify-content: center;
+}
+
+/* Botones consistentes pero más “pill” */
+.confirm-btn, .cancel-btn {
+  min-width: 120px;                 /* un poco más compactos */
+  border-radius: 999px;             /* totalmente redondeados */
+  padding: .55rem 1.1rem;
+  box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+.confirm-btn:hover, .cancel-btn:hover {
+  transform: translateY(-1px) scale(1.01);
+}
+
+/* Animaciones entrada/salida */
+@keyframes catModalIn {
+  from { opacity: 0; transform: translateY(-8px) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes catModalOut {
+  from { opacity: 1; transform: translateY(0) scale(1); }
+  to   { opacity: 0; transform: translateY(-8px) scale(.96); }
+}
+
+.close-btn {
+  background: transparent;
+  color: #fff;                  
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  display: flex;                
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.close-btn:hover {
+  transform: scale(1.1);
+}
+
+
+/* Ajuste menor de tipografía del modal general (opcional) */
+.detail-modal-container .modal-header,
+.preview-modal-container .modal-header {
+  font-size: 1.05rem; /* uniforma con el nuevo modal */
+}
+
+/* Reutiliza .category-backdrop, .confirm-btn, .cancel-btn, .category-actions, catModalIn/catModalOut */
+
+/* Contenedor del modal de borrado */
+.delete-modal {
+  width: 520px;
+  max-width: 92vw;
+  border-radius: 18px;
+  box-shadow: 0 14px 40px rgba(0,0,0,.25);
+  overflow: hidden;
+  animation: catModalIn .22s ease-out both;
+}
+.delete-modal.closing {
+  animation: catModalOut .20s ease-in both;
+}
+
+/* Header con acento rojo y título compacto */
+.delete-header {
+  background: linear-gradient(180deg, #b71c1c 0%, #a31212 100%);
+  padding: .8rem 1.2rem;
+  border-bottom: 1px solid rgba(255,255,255,.15);
+}
+.delete-header h3 {
+  margin: 0;
+  font-weight: 700;
+  font-size: 1.1rem;     /* más discreto */
+  letter-spacing: .2px;
+}
+
+/* Contenedor principal del título y filtro */
+.responsivas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Estilo para el título */
+.responsivas-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+/* Contenedor del filtro */
+.filtro-responsivas {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+}
+
+/* Etiqueta del filtro */
+.filtro-responsivas label {
+  font-weight: 500;
+  color: #495057;
+  white-space: nowrap;
+}
+
+/* Input de búsqueda */
+.filtro-responsivas input {
+  padding: 0.5rem 0.8rem;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  min-width: 250px;
+  transition: all 0.3s ease;
+}
+
+.filtro-responsivas input:focus {
+  outline: none;
+  border-color: #4dabf7;
+  box-shadow: 0 0 0 3px rgba(77, 171, 247, 0.2);
+}
+
+/* Responsive para móviles */
+@media (max-width: 768px) {
+  .responsivas-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .filtro-responsivas {
+    width: 100%;
+  }
+  
+  .filtro-responsivas input {
+    min-width: auto;
+    width: 100%;
+  }
+}

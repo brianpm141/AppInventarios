@@ -1,0 +1,76 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ areaToEdit ? 'Editar Área' : 'Registrar Área' }}</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+    <div class="form-container">
+      <form [formGroup]="areaForm" (ngSubmit)="onSubmit()">
+
+        <!-- Fila: Nombre + Piso -->
+        <div class="form-row single-row">
+          <div class="form-group">
+            <label for="name">Nombre del Área</label>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              [ngClass]="{ 'invalid-field': mostrarErrorCampos && areaForm.get('name')?.invalid }"
+            />
+            <div *ngIf="mostrarErrorCampos && areaForm.get('name')?.invalid" class="validation-error">
+              Campo obligatorio
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="id_floor">Seleccionar Piso</label>
+            <select
+              id="id_floor"
+              formControlName="id_floor"
+              [ngClass]="{ 'invalid-field': mostrarErrorCampos && areaForm.get('id_floor')?.invalid }"
+            >
+              <option value="">Seleccione un piso</option>
+              <option *ngFor="let piso of pisos" [value]="piso.id">{{ piso.name }}</option>
+            </select>
+            <div *ngIf="mostrarErrorCampos && areaForm.get('id_floor')?.invalid" class="validation-error">
+              Campo obligatorio
+            </div>
+          </div>
+        </div>
+
+        <!-- Fila: Descripción -->
+        <div class="form-row">
+          <div class="form-group" style="flex: 1 1 100%;">
+            <label for="description">Descripción</label>
+            <input
+              id="description"
+              type="text"
+              formControlName="description"
+              [ngClass]="{ 'invalid-field': mostrarErrorCampos && areaForm.get('description')?.invalid }"
+            />
+            <div *ngIf="mostrarErrorCampos && areaForm.get('description')?.invalid" class="validation-error">
+              Campo obligatorio
+            </div>
+          </div>
+        </div>
+
+        <!-- Mensaje general -->
+        <div *ngIf="mostrarErrorCampos" class="error-duplicate">
+          <img src="img/advertencia.png" class="icon-warn" />
+          <strong>Por favor, complete todos los campos obligatorios.</strong>
+        </div>
+
+        <!-- Mensaje de área duplicada -->
+        <div *ngIf="mensajeErrorDuplicado" class="error-duplicate">
+          <img src="img/advertencia.png" class="icon-warn" />
+          <strong>{{ mensajeErrorDuplicado }}</strong>
+        </div>
+
+        <div class="form-buttons">
+          <button type="button" class="btn-yellow" (click)="onClose()">Cancelar</button>
+          <button type="submit" class="btn-green">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

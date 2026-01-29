@@ -1,0 +1,61 @@
+<!-- Modal de Confirmación de Cerrar Sesión -->
+<div *ngIf="showLogoutConfirm" id="logout-backdrop">
+  <div id="logout-modal" (click)="$event.stopPropagation()">
+    <div id="logout-header">
+      ¿Estás seguro de que deseas cerrar sesión?
+    </div>
+    <div id="logout-body">
+      <button class="btn-green" (click)="confirmLogout()">Sí</button>
+      <button class="btn-yellow" (click)="cancelLogout()">No</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="main container">
+  <div class="left-container">
+    <table>
+      
+      @if (role === 1){
+        <tr><td>
+  <button (click)="opcion = 'categorias'" 
+          [ngClass]="{ 'active-btn': opcion === 'categorias' || opcion === ''}">Categorías</button>
+</td></tr>
+
+<tr><td>
+  <button (click)="opcion = 'importar'" 
+          [ngClass]="{ 'active-btn': opcion === 'importar' }">Importar Datos</button>
+</td></tr>
+
+<tr><td>
+  <button (click)="opcion = 'exportar'" 
+          [ngClass]="{ 'active-btn': opcion === 'exportar' }">Exportar Datos</button>
+</td></tr>
+
+<tr><td>
+  <button (click)="opcion = 'respaldos'" 
+          [ngClass]="{ 'active-btn': opcion === 'respaldos' }">Configurar Respaldos <br> Automáticos</button>
+</td></tr>
+      }
+<tr><td>
+  <button (click)="openLogoutConfirm()" 
+    [ngClass]="{ 'active-btn': opcion === 'cerrar' }">Cerrar Sesión</button>
+</td></tr>
+
+
+    </table>
+  </div>
+
+  <div class="rigth-container" [ngSwitch]="opcion">
+    <app-categories *ngSwitchCase="'categorias'"></app-categories>
+    <app-importdb *ngSwitchCase="'importar'"></app-importdb>
+    <app-exportdb *ngSwitchCase="'exportar'"></app-exportdb>
+    <app-progresp *ngSwitchCase="'respaldos'"></app-progresp>
+    
+    @if (role === 1) {
+      <app-categories *ngSwitchCase="''"></app-categories>
+    }
+    
+
+  </div>
+</div>

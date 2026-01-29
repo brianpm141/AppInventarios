@@ -1,0 +1,210 @@
+<div class="view-header">
+  <div class="header-container">
+    <div class="header-top">
+      <div class="header-info">
+        <h1>Gestión de Bajas</h1>
+        <p>Visualiza los equipos en resguardo y registra su baja en el sistema.</p>
+      </div>
+    </div>
+    <div class="header-filters">
+      <div class="filter-container">
+        <label for="categoria">Filtrar por categoría:</label>
+        <select id="categoria" [(ngModel)]="categoriaSeleccionada" (change)="filtrarPorCategoria()" class="styled-select">
+          <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="filter-container">
+        <label for="estado">Mostrar:</label>
+        <select id="estado" [(ngModel)]="estadoSeleccionado" (change)="filtrarPorEstado()" class="styled-select">
+          <option [ngValue]="'todos'">Todos</option>
+          <option [ngValue]="'resguardo'">Activos</option>
+          <option [ngValue]="'baja'">Dado de Baja</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="search-bar">
+  <label for="busqueda">Buscar:</label>
+  <input id="busqueda" type="text" placeholder="Buscar por marca, modelo, serie o categoría" [(ngModel)]="textoBusqueda" (input)="buscarDispositivo()" />
+</div>
+
+<div class="list-container">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Marca</th>
+        <th>Modelo</th>
+        <th>Serie</th>
+        <th>Categoría</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let equipo of dispositivosFiltrados">
+        <td>{{ equipo.brand }}</td>
+        <td>{{ equipo.model }}</td>
+        <td>{{ equipo.serial_number }}</td>
+        <td>{{ equipo.category_name }}</td>
+        <td>
+          <button [class.btn-danger]="equipo.func === 'baja'" [class.btn-yellow]="equipo.func !== 'baja'" (click)="equipo.func === 'baja' ? verDetallePorDevice(equipo.id) : abrirModalBaja(equipo)">
+            {{ equipo.func === 'baja' ? 'Ver detalle' : 'Dar de baja' }}
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal Registrar Baja -->
+<div class="modal-backdrop" *ngIf="modalVisible">
+  <div class="detail-modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header" style="background: #0d47a1; color: white;">
+      Registrar baja
+      <button class="close-btn" (click)="cerrarModal()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Info del equipo -->
+      <div class="fila-info-general">
+        <p><strong>Marca:</strong><br> {{ equipoSeleccionado?.brand }}</p>
+        <p><strong>Modelo:</strong><br> {{ equipoSeleccionado?.model }}</p>
+        <p><strong>Serie:</strong><br> {{ equipoSeleccionado?.serial_number }}</p>
+        <p><strong>Categoría:</strong><br> {{ equipoSeleccionado?.category_name }}</p>
+      </div>
+
+      <!-- Fila: Motivo / Detectado por -->
+      <div class="fila-principal fila-dos-cols">
+        <div class="col-izquierda">
+          <label>Motivo:</label>
+          <textarea [(ngModel)]="formBaja.motivo" name="motivo"></textarea>
+        </div>
+        <div class="col-derecha">
+          <label>Detectado por:</label>
+          <textarea [(ngModel)]="formBaja.detectado_por" name="detectado_por"></textarea>
+        </div>
+      </div>
+
+      <!-- Fila: Departamento (nuevo) -->
+      <div class="fila-principal">
+        <div class="col-izquierda col-full">
+          <label for="departamento">Departamento:</label>
+          <select id="departamento"
+                  class="styled-select"
+                  [(ngModel)]="formBaja.id_departamento"
+                  name="id_departamento">
+            <option [ngValue]="null" disabled selected>— Selecciona un departamento —</option>
+            <option *ngFor="let d of departamentos" [ngValue]="d.id">
+              {{ d.name }} ({{ d.abbreviation }})
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Fila: Observaciones -->
+      <div class="fila-principal">
+        <div class="col-izquierda col-full">
+          <label>Observaciones:</label>
+          <textarea [(ngModel)]="formBaja.observaciones" rows="3" name="observaciones"></textarea>
+        </div>
+      </div>
+
+      <!-- Alertas de validación -->
+      <div class="fila-final"
+           *ngIf="
+              formBaja.motivo.trim() === '' ||
+              formBaja.detectado_por.trim() === '' ||
+              formBaja.observaciones.trim() === '' ||
+              !formBaja.id_departamento
+            ">
+        <div class="alert-message">
+          ⚠️ Debes llenar todos los campos y seleccionar un <strong>departamento</strong> para continuar.
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="form-buttons">
+        <button class="btn-yellow" (click)="cerrarModal()">Cancelar</button>
+        <button class="btn-green"
+                (click)="confirmarBaja()"
+                [disabled]="
+                  formBaja.motivo.trim() === '' ||
+                  formBaja.detectado_por.trim() === '' ||
+                  formBaja.observaciones.trim() === '' ||
+                  !formBaja.id_departamento
+                ">
+          Confirmar baja
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Eliminación -->
+<div class="modal-backdrop" *ngIf="mostrarConfirmacionEliminar">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header bg-danger">
+      Confirmar Eliminación
+      <button class="close-btn" (click)="cancelarEliminacionBaja()">×</button>
+    </div>
+    <div class="modal-body">
+      <p><strong>¿Seguro que quieres eliminar?</strong></p>
+      <p>La información se perderá permanentemente.</p>
+      <div class="modal-actions">
+        <button class="btn-yellow" (click)="cancelarEliminacionBaja()">Cancelar</button>
+        <button class="btn-danger" (click)="eliminarBajaConfirmada()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle Baja -->
+<div *ngIf="bajaSeleccionada" class="modal-backdrop" (click)="cerrarDetalle()">
+  <div class="detail-modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span>Detalle de Baja - {{ bajaSeleccionada.folio }}</span>
+      <button class="close-btn" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="fila-info-general">
+        <p><strong>Marca:</strong><br>{{ bajaSeleccionada.brand }}</p>
+        <p><strong>Modelo:</strong><br>{{ bajaSeleccionada.model }}</p>
+        <p><strong>Serie:</strong><br>{{ bajaSeleccionada.serial_number }}</p>
+        <p><strong>Categoría:</strong><br>{{ bajaSeleccionada.category }}</p>
+      </div>
+
+      <h4>Motivo y Observaciones</h4>
+      <p><strong>Motivo:</strong> {{ bajaSeleccionada.motivo }}</p>
+      <p><strong>Detectado por:</strong> {{ bajaSeleccionada.detectado_por }}</p>
+      <p><strong>Observaciones:</strong> {{ bajaSeleccionada.observaciones || '—' }}</p>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-red" (click)="descargarPDF(bajaSeleccionada.id)">Descargar PDF de Baja</button>
+      <button class="btn-yellow" (click)="abrirConfirmRestaurar(bajaSeleccionada)">Cancelar baja</button>
+      <button class="btn-green" (click)="cerrarDetalle()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Confirmar Restauración -->
+<div class="modal-backdrop" *ngIf="confirmRestoreVisible">
+  <div class="detail-modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header" style="background:#ffb300; color:#212529;">
+      Confirmar restauración
+      <button class="close-btn" (click)="cancelarConfirmRestaurar()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="alert-message">
+        ⚠️ Vas a restablecer el equipo <strong>{{ bajaAReestablecer?.brand }} {{ bajaAReestablecer?.model }}</strong>
+        (Serie: <strong>{{ bajaAReestablecer?.serial_number }}</strong>) a <strong>RESGUARDO</strong>. ¿Deseas continuar?
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-yellow" (click)="cancelarConfirmRestaurar()">No, regresar</button>
+      <button class="btn-green" (click)="confirmarRestaurar()">Sí, restablecer</button>
+    </div>
+  </div>
+</div>

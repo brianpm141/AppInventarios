@@ -1,0 +1,41 @@
+<div class="main container">
+  <div class="left-container">
+    <table>
+
+        <tr><td>
+        <button (click)="opcion = 'ubicaciones'" 
+                [ngClass]="{ 'active-btn': opcion === 'ubicaciones' || opcion === '' }">Ubicaciones de<br>Dispositivos</button>
+      </td></tr>
+
+      <tr><td>
+        <button (click)="opcion = 'entregas'" 
+                [ngClass]="{ 'active-btn': opcion === 'entregas' }">Entrega de<br>Dispositivos</button>
+      </td></tr>
+
+      <tr><td>
+        <button (click)="opcion = 'mantenimientos'" 
+                [ngClass]="{ 'active-btn': opcion === 'mantenimientos' }">Mantenimiento</button>
+      </td></tr>
+
+      <tr><td>
+        <button (click)="opcion = 'bajas'" 
+                [ngClass]="{ 'active-btn': opcion === 'bajas' }">Bajas</button>
+      </td></tr>
+
+      <tr><td>
+        <button (click)="opcion = 'formatos'" 
+                [ngClass]="{ 'active-btn': opcion === 'formatos' }">Formatos Vacíos</button>
+      </td></tr>
+
+    </table>
+  </div>
+
+  <div class="rigth-container" [ngSwitch]="opcion">
+    <app-ubicaciones *ngSwitchCase="'ubicaciones'"></app-ubicaciones>
+    <app-entregas *ngSwitchCase="'entregas'"></app-entregas>
+    <app-mantenimientos *ngSwitchCase="'mantenimientos'"></app-mantenimientos>
+    <app-bajas *ngSwitchCase="'bajas'"></app-bajas>
+    <app-formatos-vacios *ngSwitchCase="'formatos'"></app-formatos-vacios>
+    <app-ubicaciones *ngSwitchDefault></app-ubicaciones>
+  </div>
+</div>

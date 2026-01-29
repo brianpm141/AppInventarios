@@ -1,0 +1,14 @@
+:root {
+  --main-font: "Source Sans 3", "Segoe UI", "Roboto", "Helvetica Neue", Arial,
+    sans-serif;
+  --main-color: #172954;
+  --background-color: #f0f7ff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  font-family: var(--main-font);
+  color: var(--main-color);
+}

@@ -1,0 +1,148 @@
+<h2>Resumen General de Equipos</h2>
+
+<div class="summary-container">
+  <div class="summary-card primary" [style.--fill]="'100%'">
+    <p>Total Equipos</p>
+    <h3>{{ summary?.totalDevices }}</h3>
+  </div>
+  <div class="summary-card success" [style.--fill]="'100%'">
+    <p>Asignados</p>
+    <h3>{{ summary?.asignado }}</h3>
+  </div>
+  <div class="summary-card info" [style.--fill]="'100%'">
+    <p>Resguardo</p>
+    <h3>{{ summary?.resguardo }}</h3>
+  </div>
+  <div class="summary-card danger" [style.--fill]="'100%'">
+    <p>Baja</p>
+    <h3>{{ summary?.baja }}</h3>
+  </div>
+  <div class="summary-card new" [style.--fill]="'100%'">
+    <p>Nuevos</p>
+    <h3>{{ summary?.nuevos }}</h3>
+  </div>
+  <div class="summary-card neutral" [style.--fill]="'100%'">
+    <p>Usados</p>
+    <h3>{{ summary?.usados }}</h3>
+  </div>
+</div>
+
+
+<h3>Filtrar por Categorías</h3>
+<div class="filters-container">
+  <label class="container" *ngFor="let cat of summary?.categories">
+    <input type="checkbox" [(ngModel)]="selectedCategories[cat.id]" (change)="loadDevices()">
+    <div class="checkmark"></div>
+    {{ cat.name }} ({{ cat.total }})
+  </label>
+</div>
+
+<h3>Filtrar por Estado del Equipo</h3>
+<div class="filters-container">
+  <label class="container">
+    <input type="radio" name="isNewFilter" [value]="null" [(ngModel)]="isNewFilter" (change)="loadDevices()" />
+    <div class="checkmark"></div>
+    Todos
+  </label>
+  <label class="container">
+    <input type="radio" name="isNewFilter" [value]="1" [(ngModel)]="isNewFilter" (change)="loadDevices()" />
+    <div class="checkmark"></div>
+    Solo nuevos
+  </label>
+  <label class="container">
+    <input type="radio" name="isNewFilter" [value]="0" [(ngModel)]="isNewFilter" (change)="loadDevices()" />
+    <div class="checkmark"></div>
+    Solo usados
+  </label>
+</div>
+
+<!-- Filtros adicionales -->
+<h3>Filtros adicionales</h3>
+<div class="filters-container">
+  <label class="container">
+    <input
+      type="radio"
+      name="funcFilter"
+      [value]="null"
+      [(ngModel)]="funcFilter"
+      (ngModelChange)="onFuncChange($event)" />
+    <div class="checkmark"></div>
+    Todos
+  </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="funcFilter"
+      [value]="'asignado'"
+      [(ngModel)]="funcFilter"
+      (ngModelChange)="onFuncChange($event)" />
+    <div class="checkmark"></div>
+    Asignado
+  </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="funcFilter"
+      [value]="'resguardo'"
+      [(ngModel)]="funcFilter"
+      (ngModelChange)="onFuncChange($event)" />
+    <div class="checkmark"></div>
+    Resguardo
+  </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="funcFilter"
+      [value]="'baja'"
+      [(ngModel)]="funcFilter"
+      (ngModelChange)="onFuncChange($event)" />
+    <div class="checkmark"></div>
+    Baja
+  </label>
+</div>
+
+
+
+<div class="actions-container">
+  <button (click)="export('csv')" [disabled]="getSelectedCategoryIds().length === 0">Exportar CSV</button>
+  <button (click)="export('excel')" [disabled]="getSelectedCategoryIds().length === 0">Exportar Excel</button>
+  <button (click)="exportPdf()" [disabled]="getSelectedCategoryIds().length === 0">Exportar PDF</button>
+</div>
+
+<h3>Listado de Equipos</h3>
+
+<div *ngIf="getSelectedCategoryIds().length === 0" style="color: red; font-weight: bold;">
+  Seleccione alguna categoría para ver el listado de dispositivos.
+</div>
+
+<table class="devices-table" *ngIf="getSelectedCategoryIds().length > 0">
+  <thead>
+    <tr>
+      <th>Marca</th>
+      <th>Modelo</th>
+      <th>Serie</th>
+      <th>Categoría</th>
+      <th>Estado</th> <!-- Nuevo campo -->
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let device of devices">
+      <td>{{ device.brand }}</td>
+      <td>{{ device.model }}</td>
+      <td>{{ device.serial_number }}</td>
+      <td>{{ device.category }}</td>
+      <td>
+        <span class="tag-status" [ngClass]="{
+          'asignado': device.func === 'asignado',
+          'resguardo': device.func === 'resguardo',
+          'baja': device.func === 'baja'
+        }">
+          {{ device.func | titlecase }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>

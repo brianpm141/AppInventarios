@@ -1,0 +1,125 @@
+<header
+  class="header-container"
+  (document:click)="handleClickOutside($event)"
+>
+
+  <div class="logo">
+    <a [routerLink]="'/homepage'" class="logo-img">
+      <img src="" class="logo-img" alt="Logo_img" />
+    </a>
+  </div>
+
+  <div class="search-section">
+    <div class="search-left">
+      <img src="icons/serch.png" alt="Buscar" class="icon-serch" />
+      <input
+        type="text"
+        placeholder="Buscar"
+        class="serch-text"
+        (input)="onInputChange($event)"
+      />
+    </div>
+  </div>
+
+</header>
+
+  <!-- Resultados de búsqueda -->
+  <div
+  class="search-dropdown"
+  *ngIf="dropdownVisible && (
+    searchResults.devices?.length ||
+    searchResults.categories?.length ||
+    searchResults.departments?.length ||
+    searchResults.floors?.length ||
+    searchResults.areas?.length ||
+    searchResults.accessories?.length
+  )"
+>
+
+    <!-- Equipos -->
+    <div *ngIf="searchResults.devices?.length">
+      <strong>Equipos</strong>
+      <div
+        *ngFor="let item of searchResults.devices"
+        (click)="goToDetails('devices', item.id)"
+        class="search-item"
+      >
+        {{ item.category }} - {{ item.serial_number }} - {{ item.brand }} {{ item.model }}
+
+        <div *ngIf="isDeviceWithCustomFields(item)" class="custom-fields-preview">
+          <div *ngFor="let field of item.custom_fields">
+            <small>{{ field.name }}: {{ field.value }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Categorías -->
+    <div *ngIf="searchResults.categories?.length">
+      <strong>Categorías</strong>
+      <div
+        *ngFor="let item of searchResults.categories"
+        (click)="goToDetails('categories', item.id)"
+        class="search-item"
+      >
+        {{ item.name }} - {{ item.description }}
+      </div>
+    </div>
+
+    <!-- Departamentos -->
+    <div *ngIf="searchResults.departments?.length">
+      <strong>Departamentos</strong>
+      <div
+        *ngFor="let item of searchResults.departments"
+        (click)="goToDetails('departments', item.id)"
+        class="search-item"
+      >
+        {{ item.name }} ({{ item.abbreviation }})
+      </div>
+    </div>
+
+    <!-- Pisos -->
+    <div *ngIf="searchResults.floors?.length">
+      <strong>Pisos</strong>
+      <div
+        *ngFor="let item of searchResults.floors"
+        (click)="goToDetails('floors', item.id)"
+        class="search-item"
+      >
+        {{ item.name }} - {{ item.description }}
+      </div>
+    </div>
+
+    <!-- Áreas -->
+    <div *ngIf="searchResults.areas?.length">
+      <strong>Áreas</strong>
+      <div
+        *ngFor="let item of searchResults.areas"
+        (click)="goToDetails('areas', item.id)"
+        class="search-item"
+      >
+        {{ item.name }} - {{ item.description }}
+      </div>
+    </div>
+
+    <!-- Accesorios -->
+    <div *ngIf="searchResults.accessories?.length">
+      <strong>Accesorios</strong>
+      <div
+        *ngFor="let item of searchResults.accessories"
+        (click)="goToDetails('accessories', item.id)"
+        class="search-item"
+      >
+        <div>
+          <strong>{{ item.category }}</strong> - {{ item.product_name }} - {{ item.brand }}
+          <span *ngIf="item.total !== undefined"> (Total: {{ item.total }})</span>
+        </div>
+        <div *ngIf="isAccessoryWithCustomFields(item)" class="custom-fields-preview">
+          <div *ngFor="let field of item.custom_fields">
+            <small>{{ field.name }}: {{ field.value }}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>

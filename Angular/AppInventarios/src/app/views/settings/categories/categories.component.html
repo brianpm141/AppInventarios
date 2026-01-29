@@ -1,0 +1,156 @@
+<div class="view-header">
+  <h1>Administra las categorías de equipos y accesorios</h1>
+</div>
+
+<div class="form-section">
+  <form [formGroup]="categoryForm" (ngSubmit)="submitForm()">
+    <div>
+      <label for="name">Nombre</label>
+      <input id="name" type="text" formControlName="name" placeholder="Nombre" />
+    </div>
+
+    <div>
+      <label for="description">Descripción</label>
+      <input id="description" type="text" formControlName="description" placeholder="Descripción" />
+    </div>
+
+    <div>
+      <label for="type">Tipo</label>
+      <select id="type" formControlName="type">
+        <option [value]="0">Equipos</option>
+        <option [value]="1">Accesorios</option>
+      </select>
+    </div>
+
+    <!-- Campos personalizados (agregar y listar) -->
+    <div class="custom-fields-section" *ngIf="isEditing">
+      <h4>Campos Personalizados</h4>
+
+      <!-- Formulario para agregar campo -->
+      <div class="custom-field-form" [formGroup]="customFieldForm">
+        <label>Nombre</label>
+        <input formControlName="name" placeholder="Nombre del campo" />
+
+        <label>Tipo</label>
+        <select formControlName="data_type">
+          <option value="text">Texto</option>
+          <option value="number">Número</option>
+        </select>
+
+        <label>
+          <input type="checkbox" formControlName="required" />
+          Requerido
+        </label>
+
+        <button type="button" (click)="addCustomField()">Agregar Campo</button>
+      </div>
+
+      <!-- Tabla de campos añadidos -->
+      <div class="custom-field-list">
+        <table *ngIf="customFields.length > 0">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Tipo</th>
+              <th>Requerido</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let field of customFields">
+              <td>{{ field.name }}</td>
+              <td>{{ field.data_type === 'text' ? 'Texto' : 'Número' }}</td>
+              <td>{{ field.required ? 'Sí' : 'No' }}</td>
+              <td>
+                <button class="btn-delete-cat" (click)="deleteCustomField(field.id)">
+                  <img src="icons/dell.png" class="icon" />
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p *ngIf="customFields.length === 0">Sin campos aún.</p>
+      </div>
+    </div>
+
+    <!-- Botones de acción -->
+    <div class="form-buttons">
+      <button type="submit" [disabled]="categoryForm.invalid">
+        {{ isEditing ? 'Actualizar' : 'Crear' }}
+      </button>
+      <button type="button" class="cancel-btn" *ngIf="isEditing" (click)="resetForm()">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<div class="table-section">
+  <h3>Listado de Categorías</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Tipo</th>
+        <th>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let cat of categories">
+        <td>{{ cat.name }}</td>
+        <td>{{ cat.description }}</td>
+        <td>{{ getTypeLabel(cat.type) }}</td>
+        <td class="actions">
+          <button (click)="editCategory(cat)">Editar</button>
+          <button (click)="confirmDelete(cat.id)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Mensajes flotantes -->
+<div class="message-box success" *ngIf="successMessage">
+  <div class="icon">✔️</div> <br>
+  {{ successMessage }}
+</div>
+
+<div class="message-box error" *ngIf="errorMessage">
+  <div class="icon">❌</div> <br>
+  {{ errorMessage }}
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div id="confirm-backdrop" *ngIf="confirmId !== null">
+  <div id="confirm-modal">
+    <div id="confirm-header">
+      Confirmar Eliminación
+      <button id="confirm-close-btn" (click)="confirmId = null">&times;</button>
+    </div>
+    <div id="confirm-body">
+      ¿Estás seguro de eliminar esta categoría?
+      <div id="confirm-buttons">
+        <button class="btn-green" (click)="deleteCategory(confirmId!)">Sí, eliminar</button>
+        <button class="btn-yellow" (click)="confirmId = null">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de restauración -->
+<div id="confirm-backdrop" *ngIf="restoreCandidate">
+  <div id="confirm-modal">
+    <div id="confirm-header">
+      Restaurar Categoría Eliminada
+      <button id="confirm-close-btn" (click)="restoreCandidate = null">×</button>
+    </div>
+    <div id="confirm-body">
+      La categoría <strong>{{ restoreCandidate.name }}</strong> ya existía pero fue desactivada.
+      <br /><br />
+      ¿Deseas restaurarla?
+      <div id="confirm-buttons">
+        <button class="btn-green" (click)="restaurarCategoria()">Sí, restaurar</button>
+        <button class="btn-yellow" (click)="restoreCandidate = null">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>

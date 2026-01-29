@@ -1,0 +1,202 @@
+<!-- Mensaje emergente de éxito o error -->
+<div *ngIf="showMessage" [ngClass]="{'message-box': true, 'success': messageType === 'success', 'error': messageType === 'error'}"> 
+  <div class="icon-container">
+    <span *ngIf="messageType === 'success'" class="icon">
+      <img src="img/suc.png" class="icon-mess" />
+    </span>
+    <span *ngIf="messageType === 'error'" class="icon">
+      <img src="img/error.png" class="icon-mess" />
+    </span>
+  </div>
+  <p>{{ messageText }}</p>
+</div>
+
+<!-- Modal confirmación de eliminación -->
+<div *ngIf="showConfirmModal" id="confirm-backdrop">
+  <div id="confirm-modal" (click)="$event.stopPropagation()">
+    <div id="confirm-header">
+      <h2>Confirmar Eliminación</h2>
+      <button id="confirm-close-btn" (click)="cancelarEliminacion()">×</button>
+    </div>
+    <div id="confirm-body">
+      <p>¿Está seguro que desea eliminar el equipo <strong>{{ equipoAEliminar?.brand }} - {{ equipoAEliminar?.model }}</strong>?</p>
+      <div id="confirm-buttons">
+        <button class="btn-yellow" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-green" (click)="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalle del equipo -->
+<div *ngIf="showDetailModal" id="detail-backdrop" (click)="cerrarDetalle()">
+  <div id="detail-modal" (click)="$event.stopPropagation()">
+    <div id="detail-header">
+      Detalles del equipo
+
+      <span
+        *ngIf="equipoSeleccionado?.func"
+        [ngClass]="{
+          'tag-status': true,
+          'asignado': equipoSeleccionado.func === 'asignado',
+          'resguardo': equipoSeleccionado.func === 'resguardo',
+          'baja': equipoSeleccionado.func === 'baja'
+        }"
+        style="margin-left: 12px;"
+      >
+        {{ equipoSeleccionado.func | titlecase }}
+      </span>
+
+      <button id="detail-close-btn" (click)="cerrarDetalle()">×</button>
+    </div>
+
+    <div id="detail-body">
+      
+    <div *ngIf="showBajaAlertOnce" class="alert-baja">
+      ⚠️ No se puede modificar un equipo dado de baja.
+    </div>
+
+      <p><strong>Marca:</strong> {{ equipoSeleccionado?.brand }}</p>
+      <p><strong>Modelo:</strong> {{ equipoSeleccionado?.model }}</p>
+      <p><strong>Serie:</strong> {{ equipoSeleccionado?.serial_number }}</p>
+      <p><strong>Categoría:</strong> {{ equipoSeleccionado?.category_name }}</p>
+      <p *ngIf="equipoSeleccionado?.is_new !== undefined">
+        <strong>Nuevo:</strong> {{ equipoSeleccionado.is_new === 1 ? 'Si' : 'No' }}
+      </p>
+      <p *ngIf="equipoSeleccionado?.group_number"><strong>Grupo:</strong> {{ equipoSeleccionado.group_number }}</p>
+
+      <div *ngIf="equipoSeleccionado?.details">
+        <p><strong>Observaciones:</strong></p>
+        <p style="white-space: pre-line;">{{ equipoSeleccionado.details }}</p>
+      </div>
+
+      <div *ngIf="equipoSeleccionado?.custom_fields?.length > 0">
+        <h4>Campos personalizados</h4>
+        <ul>
+          <li *ngFor="let campo of equipoSeleccionado.custom_fields">
+            <strong>{{ campo.name }}:</strong> {{ campo.value }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Tabla de ubicación (solo si está asignado) -->
+      <div *ngIf="equipoSeleccionado?.func === 'asignado' && equipoSeleccionado?.ubicacion" style="margin-top: 20px;">
+        <h4 style="margin-bottom: 10px;">Ubicación y Responsable</h4>
+        <table style="width: 100%; background: #ddefff; border-radius: 10px; padding: 10px;">
+          <tr>
+            <td><strong>Piso:</strong></td>
+            <td>{{ equipoSeleccionado.ubicacion.piso }}</td>
+          </tr>
+          <tr>
+            <td><strong>Área:</strong></td>
+            <td>{{ equipoSeleccionado.ubicacion.area }}</td>
+          </tr>
+          <tr>
+            <td><strong>Departamento:</strong></td>
+            <td>{{ equipoSeleccionado.ubicacion.departamento }}</td>
+          </tr>
+          <tr>
+            <td><strong>Responsable:</strong></td>
+            <td>{{ equipoSeleccionado.ubicacion.responsable }}</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Si no hay datos -->
+<div *ngIf="equipos.length === 0 && !showMessage" class="message-box">
+  No se detectaron equipos registrados.
+</div>
+
+<div class="view-header">
+  <div class="header-top">
+    <!-- Columna izquierda: Título y descripción -->
+    <div class="header-info">
+      <h1>Gestión de Equipos</h1>
+      <p>Visualiza, registra y administra los equipos registrados en el sistema.</p>
+    </div>
+
+    <!-- Columna derecha: Filtros -->
+    <div class="header-filters">
+      <div class="filter-container">
+        <label for="categoria">Filtrar por categoría:</label>
+        <select
+          id="categoria"
+          [(ngModel)]="categoriaSeleccionada"
+          (change)="filtrarPorCategoria()"
+          class="styled-select"
+        >
+          <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-container">
+        <label for="func">Mostrar equipos:</label>
+        <select
+          id="func"
+          [(ngModel)]="funcSeleccionado"
+          (change)="filtrarPorFunc()"
+          class="styled-select"
+        >
+          <option [ngValue]="'todos'">Todos</option>
+          <option [ngValue]="'asignado'">Asignado</option>
+          <option [ngValue]="'resguardo'">Resguardo</option>
+          <option [ngValue]="'baja'">Baja</option>
+        </select>
+      </div>
+
+      <div class="filter-container">
+        <label for="buscarSerie">Buscar por serie:</label>
+        <input
+          id="buscarSerie"
+          type="text"
+          [(ngModel)]="serialQuery"
+          (input)="filtrarPorSerie()"
+          class="styled-input"
+          placeholder="Ej. SN123..."
+          autocomplete="off"
+        />
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="list-container"> 
+  <div class="list-content">
+    <div 
+      class="item-card" 
+      *ngFor="let equipo of equipos" 
+      [class.selected]="equipo === equipoSeleccionado"
+      (click)="mostrarDetalles(equipo)"
+    >
+      <div class="card-row">
+        <div class="card-info">
+          <div><strong>Marca:</strong> {{ equipo.brand }}</div>
+          <div><strong>Modelo:</strong> {{ equipo.model }}</div>
+          <div><strong>Serie:</strong> {{ equipo.serial_number }}</div>
+          <div><strong>Categoría:</strong> {{ equipo.category_name }}</div> <!-- Línea agregada -->
+        </div>
+        <div class="card-actions">
+          <button class="action-btn" title="Editar" (click)="abrirEditar(equipo); $event.stopPropagation()">
+            <img src="icons/editar.png" class="icon-action" />
+          </button>
+          <button class="action-btn" title="Eliminar" (click)="eliminarEquipo(equipo); $event.stopPropagation()">
+            <img src="icons/borrar.png" class="icon-action" />
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button class="floating-new-btn" (click)="abrirModal()">Nuevo <br/> Equipo</button>
+
+<app-formdevices
+  *ngIf="showModal"
+  [isVisible]="showModal"
+  [deviceToEdit]="equipoSeleccionado"
+  (closed)="cerrarModal()"
+  (created)="onCreated($event)"
+></app-formdevices>

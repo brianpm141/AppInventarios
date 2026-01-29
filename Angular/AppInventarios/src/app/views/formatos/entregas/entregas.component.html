@@ -1,0 +1,252 @@
+<div class="view-header">
+  <h1>Asignación de Equipos por Áreas y Departamentos</h1>
+</div>
+
+<!-- Mensaje flotante -->
+<div *ngIf="mensaje" class="floating-message" [ngClass]="{ 'success': mensajeTipo === 'success', 'error': mensajeTipo === 'error' }">
+  {{ mensaje }}
+</div>
+
+<div class="form-section">
+  <form (ngSubmit)="previsualizar()">
+    <!-- Responsable + Piso + Área + Departamento -->
+    <div class="form-row">
+      <div class="form-group">
+        <label>Responsable</label>
+        <input type="text" [(ngModel)]="responsable" name="responsable" required />
+      </div>
+
+      <div class="form-group">
+        <label>Piso</label>
+        <select [(ngModel)]="id_piso" name="id_piso" (change)="cargarAreas()" required>
+          <option [ngValue]="null" disabled selected>Selecciona un piso</option>
+          <option *ngFor="let piso of pisos" [ngValue]="piso.id">{{ piso.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Área</label>
+        <select [(ngModel)]="id_area" name="id_area" [disabled]="!id_piso || areasFiltradas.length === 0" required>
+          <option [ngValue]="null" disabled selected>Selecciona un área</option>
+          <option *ngFor="let area of areasFiltradas" [ngValue]="area.id">{{ area.name }}</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Departamento</label>
+        <select [(ngModel)]="id_departamento" name="id_departamento" required>
+          <option [ngValue]="null" disabled selected>Selecciona un departamento</option>
+          <option *ngFor="let depto of departamentos" [ngValue]="depto.id">{{ depto.name }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Buscar dispositivo -->
+    <div class="form-group buscador-container">
+      <label>Buscar dispositivo (N° Serie)</label>
+      <input type="text"
+        [(ngModel)]="serieBusqueda"
+        name="serieBusqueda"
+        (input)="buscarEquipo()"
+        (keydown.enter)="agregarPrimerDispositivo()"
+        placeholder="Escribe número de serie"
+        autocomplete="off" />
+
+      <ul *ngIf="dispositivosEncontrados.length > 0" class="buscador-resultados">
+        <li *ngFor="let dev of dispositivosEncontrados" (click)="seleccionarDispositivo(dev)">
+          <strong>{{ dev.serial_number }}</strong> — {{ dev.brand }} / {{ dev.model }} / {{ dev.category }}
+        </li>
+      </ul>
+      <p class="documento-nombre">Los dispositivos asignados y dados de baja no se muestran</p>
+    </div>
+
+    <!-- Tabla dispositivos seleccionados -->
+    <div *ngIf="dispositivosSeleccionados.length > 0">
+      <h4>Dispositivos Añadidos</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Categoría</th>
+            <th>Serie</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let device of dispositivosSeleccionados">
+            <td>{{ device.brand }}</td>
+            <td>{{ device.model }}</td>
+            <td>{{ device.category }}</td>
+            <td>{{ device.serial_number }}</td>
+            <td>
+              <button type="button" class="cancel-btn" (click)="quitarDispositivo(device.id)">Quitar</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-buttons">
+      <button type="submit">Previsualizar Responsiva</button>
+      <button type="button" class="cancel-btn" (click)="limpiarFormulario()">Cancelar</button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal Previsualización -->
+<div class="modal-backdrop" *ngIf="showPreview">
+  <div class="preview-modal-container">
+    <div class="modal-header">
+      <h2>Previsualización de la Responsiva</h2>
+      <button class="close-btn" (click)="showPreview = false">&times;</button>
+    </div>
+
+    <iframe *ngIf="previewBlob" [src]="previewBlob | safeUrl" class="preview-iframe"></iframe>
+
+    <div class="modal-actions">
+      <button (click)="confirmarResponsiva()" class="confirm-btn">Confirmar y Descargar</button>
+      <button class="cancel-btn" (click)="showPreview = false">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div class="responsivas-header">
+  <h3>Responsivas Registradas</h3>
+  
+  <div class="filtro-responsivas">
+    <label>Filtrar responsivas:</label>
+    <input 
+      type="text" 
+      [(ngModel)]="filtroResponsivas" 
+      (input)="filtrarResponsivas()" 
+      placeholder="Buscar por folio, responsable o dispositivo..."
+    />
+  </div>
+</div>
+
+<table class="form-section">
+  <thead>
+    <tr>
+      <th>Folio</th>
+      <th>Fecha</th>
+      <th>Responsable</th>
+      <th>Área</th>
+      <th>Departamento</th>
+      <th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let resp of responsivasFiltradas">
+      <td>{{ resp.folio }}</td>
+      <td>{{ resp.fecha }}</td>
+      <td>{{ resp.responsable }}</td>
+      <td>{{ resp.area }}</td>
+      <td>{{ resp.departamento }}</td>
+      <td class="acciones-cell">
+        <button class="confirm-btn" (click)="verDetalleResponsiva(resp.id)">Ver Detalle</button>
+        <button *ngIf="resp.status === 0" class="cancel-btn" (click)="abrirEliminarModal(resp)">Cancelada</button>
+      </td>
+      <td class="acciones-cell">
+        <button *ngIf="resp.status === 1" class="cancel-btn" (click)="abrirEliminarModal(resp)">Eliminar</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Modal Detalle -->
+<div *ngIf="responsivaSeleccionada" class="modal-backdrop" (click)="cerrarDetalle()">
+  <div class="detail-modal-container" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <span>Detalle de Responsiva - {{ responsivaSeleccionada.folio }}</span>
+      <button class="close-btn" (click)="cerrarDetalle()">&times;</button>
+    </div>
+
+    <div class="modal-body">
+      <p><strong>Responsable:</strong> {{ responsivaSeleccionada.responsable }}</p>
+      <p><strong>Fecha:</strong> {{ responsivaSeleccionada.fecha | date:'yyyy-MM-dd' }}</p>
+      <p><strong>Área:</strong> {{ responsivaSeleccionada.area }}</p>
+      <p><strong>Departamento:</strong> {{ responsivaSeleccionada.departamento }}</p>
+
+      <h4>Dispositivos Asociados</h4>
+      <ul *ngIf="responsivaSeleccionada.dispositivos.length > 0; else sinDispositivos">
+        <li *ngFor="let dev of responsivaSeleccionada.dispositivos">
+          {{dev.category}} - {{ dev.brand }} - {{ dev.model }} ({{ dev.serial_number }})
+        </li>
+      </ul>
+      <ng-template #sinDispositivos>
+        <p>No hay dispositivos asociados.</p>
+      </ng-template>
+
+      <!-- ...otras actions... -->
+      <button class="primary-btn"
+        (click)="descargarSinFirmas(responsivaSeleccionada.id, responsivaSeleccionada.folio)">
+        Descargar sin firmas
+      </button>
+
+      <h4>Documento Firmado</h4>
+      <ng-container *ngIf="documentosResponsiva && documentosResponsiva.length > 0; else sinDocumento">
+        <div class="doc-header">
+          <p class="documento-nombre">{{ documentosResponsiva[0].nombre_archivo }}</p>
+          <button (click)="eliminarDocumento(documentosResponsiva[0].id)" class="cancel-btn">Eliminar Documento</button>
+        </div>
+      </ng-container>
+      <ng-template #sinDocumento>
+        <div class="subir-doc-contenedor">
+          <p>No hay documento firmado subido aún.</p>
+          
+          <input type="file" accept="aplication/ pdf, .pdf" (change)="onArchivoSeleccionado($event, responsivaSeleccionada.id)" class="input-archivo" />
+
+          <button class="primary-btn" (click)="subirDocumento(responsivaSeleccionada.id)">Subir documento firmado</button>
+        </div>
+      </ng-template>
+
+      <iframe *ngIf="previewUrl" [src]="previewUrl" class="preview-iframe" style="width: 100%; height: 400px; border: 1px solid #ccc; margin-top: 1rem; border-radius: 8px;"></iframe>
+    </div>
+
+    <div class="modal-actions">
+      <button *ngIf="documentosResponsiva && documentosResponsiva.length > 0" (click)="descargarDocumento()" class="warning-btn">Descargar Documento</button>
+      <button class="confirm-btn" *ngIf="responsivaSeleccionada?.status === 1" (click)="cancelarResponsiva(responsivaSeleccionada.id)">Cancelar Responsiva</button>
+      <button class="cancel-btn" (click)="cerrarDetalle()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="showDeleteConfirm" class="modal-backdrop category-backdrop" (click)="closeDeleteConfirm()">
+  <div class="confirm-modal-container delete-modal"
+       (click)="$event.stopPropagation()"
+       [ngClass]="{ closing: deleteModalClosing }">
+    <div class="modal-header delete-header">
+      <h3>Eliminar Responsiva</h3>
+      <button class="close-btn" (click)="closeDeleteConfirm()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>¿Deseas eliminar la responsiva <strong>{{ responsivaAEliminar?.folio }}</strong> permanentemente?</p>
+    </div>
+    <div class="modal-actions category-actions">
+      <button class="cancel-btn" (click)="closeDeleteConfirm()">Cancelar</button>
+      <button class="confirm-btn" (click)="confirmarEliminacionDefinitiva()">Eliminar</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="showCategoryConfirm" class="modal-backdrop category-backdrop" (click)="cerrarModalCategoria()">
+  <div class="confirm-modal-container category-modal"
+       (click)="$event.stopPropagation()"
+       [ngClass]="{ closing: categoryModalClosing }">
+    <div class="modal-header category-header">
+      <h3>Agregar otro equipo de la misma categoría</h3>
+      <button class="close-btn" (click)="cerrarModalCategoria()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <p>Ya tienes un equipo de la categoría "<strong>{{ categoriaPendiente }}</strong>".<br>
+      ¿Seguro que deseas añadir otro?</p>
+    </div>
+    <div class="modal-actions category-actions">
+      <button class="confirm-btn" (click)="confirmarAgregarMismaCategoria()">Sí</button>
+      <button class="cancel-btn" (click)="cerrarModalCategoria()">No</button>
+    </div>
+  </div>
+</div>
+

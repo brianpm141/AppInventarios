@@ -1,0 +1,212 @@
+<!-- Encabezado -->
+<div class="view-header">
+  <h1>Gestión de Pisos y Áreas</h1>
+  <p>Visualiza, registra y administra las áreas disponibles en los diferentes pisos.</p>
+</div>
+
+<!-- Mensaje flotante de éxito o error -->
+<div *ngIf="showMessage" [ngClass]="{'message-box': true, 'success': messageType === 'success', 'error': messageType === 'error'}">
+  <div class="icon-container">
+    <img *ngIf="messageType === 'success'" src="img/suc.png" class="icon-mess" />
+    <img *ngIf="messageType === 'error'" src="img/error.png" class="icon-mess" />
+  </div>
+  <p>{{ messageText }}</p>
+</div>
+
+<!-- Mensaje de error al eliminar área con equipos -->
+<div *ngIf="showAreaDeleteError" class="message-box error">
+  <div class="icon-container">
+    <img src="img/error.png" class="icon-mess" />
+  </div>
+  <p>No se puede eliminar el área porque tiene equipos asignados.</p>
+</div>
+
+<!-- Mensaje de error al eliminar piso con áreas -->
+<div *ngIf="showFloorDeleteError" class="message-box error">
+  <div class="icon-container">
+    <img src="img/error.png" class="icon-mess" />
+  </div>
+  <p>No se puede eliminar el piso porque tiene áreas asignadas.</p>
+</div>
+
+<!-- Mostrar si no hay áreas ni pisos -->
+<div *ngIf="areas.length === 0 && pisos.length === 0 && !showMessage" class="message-box">
+  No se detectaron áreas y pisos registrados.
+</div>
+
+<!-- Buscador por área (alineado arriba a la derecha con tu CSS) -->
+<div class="header-filters">
+  <div class="filter-container">
+    <label for="buscarArea">Buscar área:</label>
+    <input
+      id="buscarArea"
+      #q
+      type="text"
+      class="styled-input"
+      placeholder="Escribe el nombre del área…"
+      autocomplete="off"
+      (input)="onSearch(q.value)"
+    />
+  </div>
+</div>
+
+<!-- Lista de Pisos y Áreas agrupadas -->
+<div class="list-container">
+  <div *ngFor="let piso of pisos" class="item-card">
+    <!-- Encabezado del piso -->
+    <div
+      class="card-row"
+      [class.piso-activo]="pisoExpandidoId !== piso.id && hasSelectedAreaOnFloor(piso.id)"
+      [class.highlight-floor]="searchQuery && matchedFloorIds.has(piso.id)"
+      (click)="toggleExpandirPiso(piso.id)"
+    >
+      <div class="card-info">
+        <strong>{{ piso.name }}</strong>
+      </div>
+      <div class="card-actions">
+        <button class="action-btn" title="Ver detalles" (click)="mostrarDetallesPiso(piso); $event.stopPropagation()">
+          <img src="icons/ver.png" class="icon-action" />
+        </button>
+        <button class="action-btn" title="Editar piso" (click)="abrirEditarPiso(piso); $event.stopPropagation()">
+          <img src="icons/editar.png" class="icon-action" />
+        </button>
+        <button class="action-btn" title="Eliminar piso" (click)="eliminarPiso(piso); $event.stopPropagation()">
+          <img src="icons/borrar.png" class="icon-action" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Áreas dentro del piso -->
+    <div *ngIf="pisoExpandidoId === piso.id" class="list-content" style="margin-top: 10px;">
+      <ng-container *ngFor="let area of getAreasPorPiso(piso.id)">
+        <div
+          class="item-card"
+          [class.selected]="area === areaSeleccionada"
+          (click)="mostrarDetalles(area)"
+        >
+          <div class="card-row">
+            <div class="card-info">
+              <div><strong>Área:</strong> {{ area.name }}</div>
+              <div><strong>Descripción:</strong> {{ area.description }}</div>
+            </div>
+            <div class="card-actions">
+              <button class="action-btn" title="Editar" (click)="abrirEditar(area); $event.stopPropagation()">
+                <img src="icons/editar.png" class="icon-action" />
+              </button>
+              <button class="action-btn" title="Eliminar" (click)="eliminarArea(area); $event.stopPropagation()">
+                <img src="icons/borrar.png" class="icon-action" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+
+  <!-- Botón debajo de todos los pisos -->
+  <div class="list-buttons">
+    <button class="btn-green" (click)="showFloorModal = true">+ Nuevo Piso</button>
+  </div>
+</div>
+
+<!-- Botón flotante para nueva área -->
+<button class="floating-new-btn" (click)="abrirModal()">Nueva <br /> Área</button>
+
+<!-- Modal confirmación eliminación -->
+<div *ngIf="showConfirmModal" id="confirm-backdrop">
+  <div id="confirm-modal" (click)="$event.stopPropagation()">
+    <div id="confirm-header">
+      <span>Confirmar Eliminación</span>
+      <button id="confirm-close-btn" (click)="cancelarEliminacion()">×</button>
+    </div>
+    <div id="confirm-body">
+      <p>
+        ¿Está seguro que desea eliminar
+        <strong>{{ areaAEliminar?.name || pisoAEliminar?.name }}</strong>?
+      </p>
+      <div id="confirm-buttons">
+        <button class="btn-yellow" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-green" (click)="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal detalles de área -->
+<div *ngIf="showDetailModal" id="detail-backdrop" (click)="cerrarDetalle()">
+  <div id="detail-modal" (click)="$event.stopPropagation()">
+    <div id="detail-header">
+      Detalles de Área
+      <button id="detail-close-btn" (click)="cerrarDetalle()">×</button>
+    </div>
+    <div id="detail-body">
+      <p><strong>Área:</strong> {{ areaSeleccionada?.name }}</p>
+      <p><strong>Piso:</strong> {{ areaSeleccionada?.floor_name }}</p>
+      <p><strong>Descripción:</strong> {{ areaSeleccionada?.description }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal detalles de piso -->
+<div *ngIf="showDetailPisoModal" id="detail-backdrop" (click)="cerrarDetallePiso()">
+  <div id="detail-modal" (click)="$event.stopPropagation()">
+    <div id="detail-header">
+      Detalles de Piso
+      <button id="detail-close-btn" (click)="cerrarDetallePiso()">×</button>
+    </div>
+    <div id="detail-body">
+      <p><strong>Piso:</strong> {{ pisoSeleccionado?.name }}</p>
+      <p><strong>Descripción:</strong> {{ pisoSeleccionado?.description }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de restauración de área eliminada -->
+<div *ngIf="showRestoreModal" class="modal-backdrop">
+  <div class="detail-modal-container message-box" (click)="$event.stopPropagation()">
+    <div class="icon-container">
+      <img src="img/advertencia.png" class="icon-mess" />
+    </div>
+    <p><strong>Ya existe un área con el nombre "{{ areaReactivarNombre }}".</strong></p>
+    <p>¿Deseas restablecerla?</p>
+    <div class="form-buttons">
+      <button class="btn-green" (click)="restablecerArea()">Sí, restablecer</button>
+      <button class="btn-yellow" (click)="showRestoreModal = false">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal de restauración de piso eliminado -->
+<div *ngIf="showRestoreFloorModal" class="modal-backdrop">
+  <div class="detail-modal-container message-box" (click)="$event.stopPropagation()">
+    <div class="icon-container">
+      <img src="img/advertencia.png" class="icon-mess" />
+    </div>
+    <p><strong>Ya existe un piso con el nombre "{{ pisoReactivarNombre }}".</strong></p>
+    <p>¿Deseas restablecerlo?</p>
+    <div class="form-buttons">
+      <button class="btn-green" (click)="restablecerPiso()">Sí, restablecer</button>
+      <button class="btn-yellow" (click)="showRestoreFloorModal = false">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Formularios embebidos -->
+<app-formarea
+  *ngIf="showModal"
+  [isVisible]="showModal"
+  [areaToEdit]="areaSeleccionada"
+  [pisos]="pisos"
+  (closed)="cerrarModal()"
+  (created)="onCreated()"
+  (restoreEvent)="onRestoreArea($event)"
+></app-formarea>
+
+<app-formfloor
+  *ngIf="showFloorModal"
+  [isVisible]="showFloorModal"
+  [floorToEdit]="pisoSeleccionado"
+  (closed)="showFloorModal = false"
+  (created)="onCreatedFloor()"
+  (restoreEvent)="onRestoreFloor($event)"
+></app-formfloor>

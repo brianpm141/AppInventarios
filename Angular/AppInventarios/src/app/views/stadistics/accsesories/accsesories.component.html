@@ -1,0 +1,179 @@
+<h2>Resumen General de Accesorios</h2>
+
+<div class="summary-container">
+  <div class="summary-card info" [style.--fill]="'100%'">
+    <p>Total Accesorios</p>
+    <h3>{{ stats?.total }}</h3>
+  </div>
+  <div class="summary-card warning" [style.--fill]="(stats?.porcentajePorAgotarse || 0) + '%'">
+    <p>Por Agotarse</p>
+    <h3>{{ stats?.porAgotarse }}</h3>
+  </div>
+  <div class="summary-card danger" [style.--fill]="(stats?.porcentajeAgotados || 0) + '%'">
+    <p>Agotados</p>
+    <h3>{{ stats?.agotados }}</h3>
+  </div>
+</div>
+
+<!-- Acciones de exportación -->
+<div class="actions-container">
+  <button (click)="export('csv')" [disabled]="getSelectedCategoryIds().length === 0">Exportar CSV</button>
+  <button (click)="export('excel')" [disabled]="getSelectedCategoryIds().length === 0">Exportar Excel</button>
+  <button (click)="exportPdf()" [disabled]="accesorios.length === 0">Exportar PDF</button>
+</div>
+
+<h3>Filtrar por Categoría</h3>
+<div class="filters-container">
+
+  <!-- Seleccionar todas (tri–state) -->
+  <label class="container">
+    <input
+      type="checkbox"
+      [ngModel]="selectAll"
+      (ngModelChange)="toggleSelectAll($event)"
+      [indeterminate]="indeterminate">
+    <div class="checkmark"></div>
+    Seleccionar todas ({{ stats?.total || 0 }})
+  </label>
+
+  <!-- Lista de categorías -->
+  <label class="container" *ngFor="let cat of resumenCategorias; trackBy: trackByCategoria">
+    <input
+      type="checkbox"
+      [(ngModel)]="selectedCategories[cat.id]"
+      (ngModelChange)="onCategoryChange()">
+    <div class="checkmark"></div>
+    {{ cat.name }} ({{ cat.total }})
+  </label>
+</div>
+
+<h3>Filtrar por Stock</h3>
+
+<div class="filters-container">
+  <label class="container">
+    <input
+      type="radio"
+      name="stockFilter"
+      [value]="'all'"
+      [(ngModel)]="stockFilter"
+      (ngModelChange)="onStockChange($event)" />
+    <div class="checkmark"></div>
+    Todos
+  </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="stockFilter"
+      [value]="'available'"
+      [(ngModel)]="stockFilter"
+      (ngModelChange)="onStockChange($event)" />
+    <div class="checkmark"></div>
+    Disponibles
+    </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="stockFilter"
+      [value]="'low'"
+      [(ngModel)]="stockFilter"
+      (ngModelChange)="onStockChange($event)" />
+    <div class="checkmark"></div>
+    Por agotarse 
+  </label>
+
+  <label class="container">
+    <input
+      type="radio"
+      name="stockFilter"
+      [value]="'out'"
+      [(ngModel)]="stockFilter"
+      (ngModelChange)="onStockChange($event)" />
+    <div class="checkmark"></div>
+    Agotados
+  </label>
+</div>
+
+
+<!-- Listado de accesorios -->
+<h3>Listado de Accesorios</h3>
+
+<p *ngIf="getSelectedCategoryIds().length > 0">
+  Categorías seleccionadas: {{ getSelectedCategoryIds().length }}
+  <br>
+  <small>{{ categoriasSeleccionadasTexto }}</small>
+</p>
+
+<div *ngIf="getSelectedCategoryIds().length === 0" style="color: red; font-weight: bold;">
+  Seleccione alguna categoría para ver el listado.
+</div>
+
+<table class="devices-table" *ngIf="getSelectedCategoryIds().length > 0">
+  <thead>
+    <tr>
+      <th>Marca</th>
+      <th>Producto</th>
+      <th>Categoría</th>
+      <th style="text-align:right;">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of accesorios; trackBy: trackByAccesorio">
+      <td>{{ item.brand }}</td>
+      <td>{{ item.product_name }}</td>
+      <td>{{ item.category }}</td>
+      <td style="text-align:right;">{{ item.total }}</td>
+    </tr>
+  </tbody>
+  <tfoot *ngIf="accesorios.length">
+    <tr>
+      <td colspan="3" style="text-align:right; font-weight:600;">Totales (selección actual)</td>
+      <td style="text-align:right; font-weight:600;">
+        {{ unidadesTotalesSeleccionadas }}
+      </td>
+    </tr>
+    <tr>
+      <td colspan="3" style="text-align:right; font-size: 0.9em;">Registros</td>
+      <td style="text-align:right; font-size: 0.9em;">
+        {{ registrosSeleccionados }}
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<!-- Lista de accesorios agotados -->
+<div *ngIf="accesoriosAgotados?.length">
+  <h3>Accesorios Agotados</h3>
+  <table class="devices-table table-compact">
+    <thead>
+      <tr>
+        <th>Marca</th>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th style="text-align:right;">Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of accesoriosAgotados; trackBy: trackByAccesorio">
+        <td>{{ item.brand }}</td>
+        <td>{{ item.product_name }}</td>
+        <td>{{ item.category }}</td>
+        <td style="text-align:right;">{{ item.total }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Mensaje flotante -->
+<div *ngIf="showMessage" [ngClass]="{'message-box': true, 'success': messageType === 'success', 'error': messageType === 'error'}">
+  <div class="icon-container">
+    <span *ngIf="messageType === 'success'" class="icon">
+      <img src="img/suc.png" class="icon-mess" />
+    </span>
+    <span *ngIf="messageType === 'error'" class="icon">
+      <img src="img/error.png" class="icon-mess" />
+    </span>
+  </div>
+  <p>{{ messageText }}</p>
+</div>

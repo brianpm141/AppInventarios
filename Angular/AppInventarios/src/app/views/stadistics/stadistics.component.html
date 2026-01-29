@@ -1,0 +1,17 @@
+<div class="main container">
+  <div class="left-container">
+    <table>
+      <tr><td>
+        <button (click)="selectView('devices')" [ngClass]="{ 'active-btn': opcion === 'devices' }">Equipos</button>
+      </td></tr>
+      <tr><td>
+        <button (click)="selectView('accessories')" [ngClass]="{ 'active-btn': opcion === 'accessories' }">Accesorios</button>
+      </td></tr>
+    </table>
+  </div>
+
+  <div class="rigth-container" [ngSwitch]="opcion">
+    <app-devices *ngSwitchCase="'devices'"></app-devices>
+    <app-accsesories *ngSwitchCase="'accessories'"></app-accsesories>
+  </div>
+</div>

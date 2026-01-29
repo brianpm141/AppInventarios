@@ -1,0 +1,337 @@
+/* === ENCABEZADO PRINCIPAL === */
+.view-header h1 {
+  color: #0b3d91;
+  margin-bottom: 0.3rem;
+}
+.view-header p {
+  color: #555;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+/* === CONTENEDOR GENERAL === */
+.ubicaciones-container {
+  margin-top: 1.5rem;
+}
+.piso-card {
+  margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+.piso-header {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #0b3d91;
+  margin-bottom: 0.8rem;
+}
+.area-card {
+  margin-bottom: 1rem;
+}
+.area-header {
+  font-weight: bold;
+  margin: 1rem 0 0.5rem;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* === ENCABEZADO GRUPO === */
+.departamento-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.8rem 0 0.3rem;
+  padding: 0.5rem 1rem;
+  background-color: #f0f7ff;
+  border-radius: 0.5rem 0.5rem 0 0;
+  font-weight: bold;
+  color: #333;
+}
+.departamento-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+}
+.fecha-mantenimiento {
+  font-size: 0.8rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* === BOTÓN DE MANTENIMIENTO === */
+.mantenimiento-btn {
+  background-color: #0b6e4f;
+  color: white;
+  padding: 0.4rem 0.9rem;
+  font-size: 0.85rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+.mantenimiento-btn:hover {
+  background-color: #07523c;
+}
+
+/* === TABLA DE DISPOSITIVOS === */
+.mantenimiento-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+  font-size: 0.95rem;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+.mantenimiento-table th,
+.mantenimiento-table td {
+  border: 1px solid #ddd;
+  padding: 0.6rem;
+  text-align: left;
+}
+.mantenimiento-table th {
+  background: #eaf1ff;
+  color: #0b3d91;
+  font-weight: 600;
+}
+.mantenimiento-table tr:hover {
+  background-color: #f0f7ff;
+}
+
+/* === BACKDROP Y MODAL === */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2000;
+}
+
+.detail-modal-container {
+  background: #f0f7ff;
+  border-radius: 20px;
+  width: 96vw;
+  max-width: 1100px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === HEADER === */
+.modal-header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.2rem 2rem;
+  background: #aacbee;
+  color: #172954;
+  font-weight: bold;
+  font-size: 1.2rem;
+  position: relative;
+  border-radius: 20px 20px 0 0;
+}
+.close-btn {
+  position: absolute;
+  right: 2rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+}
+
+/* === CUERPO === */
+.modal-body {
+  padding: 2rem;
+  background: #f0f7ff;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* === FILA 1: DATOS GENERALES === */
+.fila-info-general {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1rem 2rem;
+}
+.fila-info-general p {
+  background: #eaf1ff;
+  padding: 0.5rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 0;
+  text-wrap: balance;
+}
+
+/* === FILA 2: IZQ 70% - DER 30% === */
+.fila-principal {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-top: 3vh;
+}
+
+.col-izquierda {
+  flex: 7;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.col-derecha {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+textarea {
+  width: 100%;
+  height: 90px;
+  resize: none;
+  font-size: 0.9rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #aacbee;
+  border-radius: 10px;
+  box-sizing: border-box;
+}
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.25);
+}
+
+/* === CHECKBOX UNIFICADO === */
+.form-group {
+  margin: 0;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.9rem;
+  background-color: #eef6ff;
+  border: 1px solid #c2dcf6;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  transition: background-color 0.3s;
+}
+.checkbox-label:hover {
+  background-color: #e1f0ff;
+}
+.checkbox-label input[type="checkbox"] {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #007bff;
+  border-radius: 5px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s ease-in-out;
+}
+.checkbox-label input[type="checkbox"]:checked {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+.checkbox-label input[type="checkbox"]:checked::after {
+  content: "✔";
+  color: white;
+  font-size: 0.9rem;
+  position: absolute;
+  top: -2px;
+  left: 3px;
+}
+.check-text {
+  flex: 1;
+  user-select: none;
+}
+.device-check {
+  margin: 0.4rem 0;
+}
+
+/* === FILA 3: ALERTA + BOTONES === */
+.fila-final {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 3vh;
+}
+.alert-message {
+  background-color: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 0.9rem 1rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+/* === BOTONES === */
+.form-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+}
+.btn-green,
+.btn-yellow {
+  min-width: 140px;
+  max-width: 200px;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s, transform 0.2s;
+}
+.btn-green {
+  background: #28a745;
+  color: #fff;
+}
+.btn-green:hover {
+  background: #218838;
+  transform: translateY(-2px);
+}
+.btn-green:disabled {
+  background: #a6d8b3;
+  cursor: not-allowed;
+  transform: none;
+}
+.btn-yellow {
+  background: #ffc107;
+  color: #212529;
+}
+.btn-yellow:hover {
+  background: #e0a800;
+  transform: translateY(-2px);
+}
+
+/* === RESPONSIVO === */
+@media (max-width: 768px) {
+  .fila-principal {
+    flex-direction: column;
+  }
+  .fila-info-general {
+    grid-template-columns: 1fr;
+  }
+  .form-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .btn-green,
+  .btn-yellow {
+    width: 100%;
+  }
+}

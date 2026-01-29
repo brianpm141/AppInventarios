@@ -1,0 +1,205 @@
+<!-- 1) Encabezado: título + filtros -->
+<div class="view-header">
+  <div class="header-top">
+    <div class="header-info">
+      <h1>Gestión de Accesorios</h1>
+      <p>Visualiza, registra y administra los accesorios del sistema.</p>
+    </div>
+
+    <div class="header-filters">
+      <!-- Filtro por categoría -->
+      <div class="filter-container">
+        <label for="categoriaFiltro">Filtrar por categoría:</label>
+        <select
+          id="categoriaFiltro"
+          [(ngModel)]="categoriaSeleccionada"
+          (change)="aplicarFiltros()"
+          class="styled-select">
+          <option [ngValue]="null">Todas</option>
+          <option *ngFor="let cat of categorias" [ngValue]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+
+      <!-- Orden -->
+      <div class="filter-container">
+        <label for="ordenFiltro">Ordenar por:</label>
+        <select
+          id="ordenFiltro"
+          [(ngModel)]="ordenSeleccionado"
+          (change)="aplicarFiltros()"
+          class="styled-select">
+          <option value="recientes">Agregado recientemente</option>
+          <option value="nombreAsc">Nombre (A-Z)</option>
+          <option value="nombreDesc">Nombre (Z-A)</option>
+          <option value="stockAsc">Stock (bajo→alto)</option>
+          <option value="agotadosPrimero">Agotados primero</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 2) No hay accesorios -->
+<div *ngIf="hasLoaded && accesorios().length === 0 && !showMessage" class="message-boxs">
+  No se detectaron accesorios registrados.
+</div>
+
+<!-- 3) Lista de accesorios -->
+<div class="list-container" *ngIf="accesorios().length > 0">
+  <div
+    class="item-card"
+    *ngFor="let accesorio of accesorios()"
+    (click)="mostrarDetalles(accesorio)"
+  >
+    <div class="card-row">
+      <div class="card-info">
+        <div><strong>Nombre del accesorio:</strong> {{ accesorio.product_name }}</div>
+        <div><strong>Marca:</strong> {{ accesorio.brand }}</div>
+
+        <div class="total-control">
+          <strong>Total:</strong>
+          <button
+            class="plus-minus-btn"
+            type="button"
+            [disabled]="accesorio.total === 0"
+            (click)="actualizarTotal(accesorio, -1); $event.stopPropagation()"
+            aria-label="Disminuir total"
+            title="Disminuir total"
+          >–</button>
+
+          <strong>{{ accesorio.total }}</strong>
+
+          <button
+            class="plus-minus-btn"
+            type="button"
+            (click)="actualizarTotal(accesorio, 1); $event.stopPropagation()"
+            aria-label="Aumentar total"
+            title="Aumentar total"
+          >+</button>
+        </div>
+      </div>
+
+      <!-- Acciones -->
+      <div class="card-actions">
+        <!-- Indicadores de estado -->
+        <img
+          *ngIf="accesorio.total === 1"
+          src="img/advertencia.png"
+          class="icon-warning-inline"
+          title="Accesorio por agotarse"
+          alt=""
+        />
+        <img
+          *ngIf="accesorio.total === 0"
+          src="img/error.png"
+          class="icon-warning-inline"
+          title="Accesorio agotado"
+          alt=""
+        />
+
+        <button
+          class="action-btn"
+          type="button"
+          title="Editar"
+          aria-label="Editar accesorio"
+          (click)="editar(accesorio); $event.stopPropagation()"
+        >
+          <img src="icons/editar.png" class="icon-action" alt="" />
+        </button>
+
+        <button
+          class="action-btn"
+          type="button"
+          title="Eliminar"
+          aria-label="Eliminar accesorio"
+          (click)="abrirConfirmacion(accesorio); $event.stopPropagation()"
+        >
+          <img src="icons/borrar.png" class="icon-action" alt="" />
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4) Botón flotante Nuevo -->
+<button class="floating-new-btn" type="button" (click)="abrirModal()">Nuevo Accesorio</button>
+
+<!-- 5) Formulario de accesorio (modal hijo) -->
+<app-formaccessories
+  *ngIf="showModal"
+  [isVisible]="showModal"
+  [accessoryToEdit]="accesorioSeleccionado"
+  (closed)="cerrarModal()"
+  (created)="onCreated($event)"
+></app-formaccessories>
+
+<!-- 6) Modal de confirmación de eliminación -->
+<div *ngIf="showConfirmModal" id="confirm-backdrop">
+  <div id="confirm-modal" (click)="$event.stopPropagation()">
+    <div id="confirm-header">
+      <h2>Confirmar Eliminación</h2>
+      <button id="confirm-close-btn" type="button" (click)="cancelarEliminacion()" aria-label="Cerrar">×</button>
+    </div>
+    <div id="confirm-body">
+      <p>¿Deseas eliminar <strong>{{ accesorioAEliminar?.product_name }}</strong>?</p>
+      <div id="confirm-buttons">
+        <button class="btn-yellow" type="button" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-green" type="button" (click)="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 7) Modal Detalle del accesorio -->
+<div *ngIf="showDetailModal" id="detail-backdrop" (click)="cerrarDetalle()">
+  <div id="detail-modal" (click)="$event.stopPropagation()">
+    <div id="detail-header">
+      Detalles del accesorio
+      <button id="detail-close-btn" type="button" (click)="cerrarDetalle()" aria-label="Cerrar">×</button>
+    </div>
+
+    <!-- Banner de advertencia dentro del modal -->
+    <div
+      *ngIf="accesorioSeleccionado && accesorioSeleccionado.total <= 1"
+      class="warning-inline detail-banner"
+      role="alert"
+      aria-live="assertive"
+    >
+      <img
+        [src]="accesorioSeleccionado.total === 0 ? 'img/error.png' : 'img/advertencia.png'"
+        alt=""
+      />
+      <span *ngIf="accesorioSeleccionado.total === 0">
+        El accesorio "<strong>{{ accesorioSeleccionado.product_name }}</strong>" está <strong>agotado</strong>.
+      </span>
+      <span *ngIf="accesorioSeleccionado.total === 1">
+        El accesorio "<strong>{{ accesorioSeleccionado.product_name }}</strong>" está <strong>por agotarse</strong>, solo queda <strong>1</strong>.
+      </span>
+    </div>
+
+    <div id="detail-body">
+      <p><strong>Nombre del accesorio:</strong> {{ accesorioSeleccionado?.product_name }}</p>
+      <p><strong>Marca:</strong> {{ accesorioSeleccionado?.brand }}</p>
+      <p><strong>Total:</strong> {{ accesorioSeleccionado?.total }}</p>
+      <p><strong>Categoría:</strong> {{ accesorioSeleccionado?.category_name }}</p>
+
+      <div *ngIf="accesorioSeleccionado?.details">
+        <p><strong>Observaciones:</strong></p>
+        <p style="white-space: pre-line;">{{ accesorioSeleccionado?.details }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 8) Mensaje flotante -->
+<div *ngIf="showZeroMessage" class="message-box warning">
+  <div class="icon-container">
+    <img
+      [src]="accesorioEnCero?.total === 0 ? 'img/error.png' : 'img/advertencia.png'"
+      class="icon-warning-float"
+      [title]="accesorioEnCero?.total === 0 ? '¡Agotado!' : '¡Por agotarse!'"
+      alt=""
+    />
+  </div>
+  <p>{{ mensajeZero }}</p>
+</div>

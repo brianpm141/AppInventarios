@@ -1,0 +1,115 @@
+.container {
+  background-color: transparent;
+  height: 80vh;
+  max-width: 70vw;
+  margin: auto;
+  margin-top: 10vh;
+  text-align: center;
+  border-radius: 20px;
+  padding: 2rem;
+  box-sizing: border-box;
+  justify-content: center;
+  text-align: center;
+  padding: auto;
+}
+
+h1 {
+  color: #00234b;
+  margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+}
+
+p {
+  color: #00234b;
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 2rem;
+  justify-items: center;
+}
+
+.card {
+  background-color: transparent;
+  border: 3px solid transparent;
+  border-radius: 20px;
+  padding: 2rem 1rem;
+  width: 100%;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s, border-color 0.3s;
+  cursor: pointer;
+  box-sizing: border-box;
+  max-width: 240px;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  border-color: #1d53d8;
+  background-color: #dbecfe;
+}
+
+.card img {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1rem;
+}
+
+.card span {
+  display: block;
+  color: #00234b;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.card small {
+  display: block;
+  color: #555b6e;
+  font-size: 0.9rem;
+  line-height: 1.2;
+}
+
+/* ADAPTACIÓN PARA MÓVILES */
+@media (max-width: 600px) {
+  .container {
+    max-width: 95vw;
+    padding: 1.2rem;
+    margin: 1rem auto;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+
+  p {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  .card {
+    max-width: 90%;
+    padding: 1.5rem 1rem;
+  }
+
+  .card img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .card span {
+    font-size: 1rem;
+  }
+
+  .card small {
+    font-size: 0.85rem;
+  }
+}

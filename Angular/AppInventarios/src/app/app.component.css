@@ -1,0 +1,27 @@
+.app-body {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  top: 30px; /* altura del header */
+  width: 100%;
+  height: calc(100vh - 30px); /* para no tapar el header */
+  transition: all 0.3s ease;
+  background-color: #f0f7ff;
+}
+
+.main {
+  flex: 1;
+  padding: 5px;
+  overflow-y: auto;
+  box-sizing: border-box;
+  transition: margin-left 0.3s ease;
+}
+
+/* Aquí controlamos el margen dependiendo de si el sidebar está o no visible */
+.main.expanded {
+  margin-left: 0;
+}
+
+.main.collapsed {
+  margin-left: 250px; /* el ancho exacto de tu sidebar */
+}

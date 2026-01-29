@@ -1,0 +1,105 @@
+<div class="modal-backdrop" *ngIf="isVisible">
+  <div class="modal-content">
+
+    <!-- Mensaje emergente -->
+    <div *ngIf="showMessage" [ngClass]="{'message-box': true, 'success': messageType === 'success', 'error': messageType === 'error'}">
+      <div class="icon-container">
+        <span *ngIf="messageType === 'success'" class="icon">
+          <img src="img/suc.png" class="icon-mess" />
+        </span>
+        <span *ngIf="messageType === 'error'" class="icon">
+          <img src="img/error.png" class="icon-mess" />
+        </span>
+      </div>
+      <p>{{ messageText }}</p>
+    </div>
+
+    <!-- Mensaje de confirmación de duplicado -->
+    <div *ngIf="confirmarDuplicado" class="message-box confirm" style="z-index: 3000;">
+      <div class="icon-container">
+        <img src="img/advertencia.png" class="icon-mess" />
+      </div>
+      <p>Ya existe un accesorio con el nombre <strong>{{ nombreDuplicado }}</strong>.</p>
+      <p>¿Deseas registrarlo de todos modos?</p>
+      <div class="form-buttons" style="margin-top: 1rem;">
+        <button class="btn-green" (click)="continuarConDuplicado()">Sí, registrar</button>
+        <button class="btn-yellow" (click)="cancelarDuplicado()">Cancelar</button>
+      </div>
+    </div>
+
+    <div class="modal-header">
+      <h2>{{ accessoryToEdit ? 'Editar Accesorio' : 'Nuevo Accesorio' }}</h2>
+      <button class="close-btn" (click)="cerrar()">×</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-container">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Nombre del accesorio:</label>
+          <input
+            formControlName="product_name"
+            [ngClass]="{ 'input-error': form.get('product_name')?.invalid && form.get('product_name')?.touched }"
+            placeholder="Nombre del accesorio"
+          />
+          <div *ngIf="form.get('product_name')?.invalid && form.get('product_name')?.touched" class="error-message">
+            Campo obligatorio
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Marca o Modelo:</label>
+          <input
+            formControlName="brand"
+            [ngClass]="{ 'input-error': form.get('brand')?.invalid && form.get('brand')?.touched }"
+            placeholder="Marca o modelo"
+          />
+          <div *ngIf="form.get('brand')?.invalid && form.get('brand')?.touched" class="error-message">
+            Campo obligatorio
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label>Cantidad total:</label>
+          <input
+            type="number"
+            formControlName="total"
+            min="1"
+            max="999"
+            [ngClass]="{ 'input-error': form.get('total')?.invalid && form.get('total')?.touched }"
+          />
+          <div *ngIf="form.get('total')?.invalid && form.get('total')?.touched" class="error-message">
+            Total debe ser mayor a 1 y menor a 999
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Categoría:</label>
+          <select
+            formControlName="category_id"
+            [ngClass]="{ 'input-error': form.get('category_id')?.invalid && form.get('category_id')?.touched }"
+          >
+            <option value="">Seleccione</option>
+            <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.name }}</option>
+          </select>
+          <div *ngIf="form.get('category_id')?.invalid && form.get('category_id')?.touched" class="error-message">
+            Campo obligatorio
+          </div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group" style="flex: 1 1 100%;">
+          <label>Observaciones (opcional):</label>
+          <textarea formControlName="details" rows="4" placeholder="Detalles adicionales..."></textarea>
+        </div>
+      </div>
+
+      <div class="form-buttons">
+        <button type="button" class="btn-yellow" (click)="cerrar()">Cancelar</button>
+        <button type="submit" class="btn-green">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

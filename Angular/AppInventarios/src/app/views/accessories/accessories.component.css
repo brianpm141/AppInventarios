@@ -1,0 +1,243 @@
+/* ===============================
+   1. ENCABEZADO
+================================== */
+.view-header {
+  width: 90%;
+  margin-left: 70px;
+  color: #00234b;
+  margin-top: 5vh;
+}
+.view-header h1 {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+.view-header p {
+  font-size: 1.1rem;
+  color: #444;
+}
+
+/* ===============================
+   2. LISTADO Y TARJETAS
+================================== */
+.list-container {
+  width: 70vw; height: 65vh; margin: auto; margin-top: 1.5vh;
+  background: #f0f7ff; padding: 3%; border-radius: 10px; overflow-y: auto;
+}
+.item-card {
+  background: #fff; border: 1px solid #aacbee; border-radius: 8px;
+  padding: 15px; margin-bottom: 15px; box-shadow: 0 0 5px rgba(0,0,0,.05);
+  transition: all .3s ease;
+}
+.item-card:hover { background: #dbecfe; border-color: #00234b; }
+.card-row { display: flex; justify-content: space-between; align-items: center; }
+.card-info { display: flex; flex-direction: column; gap: 5px; }
+.card-actions { height: 7vh; display: flex; gap: 1.5vw; }
+.action-btn {
+  background: transparent; border: none; font-size: .5rem; cursor: pointer; transition: transform .3s;
+}
+.action-btn:hover { transform: scale(1.2); }
+.icon-action { max-height: 60%; transition: transform .3s ease; }
+.action-btn:hover .icon-action { transform: scale(1.1); }
+
+/* ===============================
+   3. BOTÓN FLOTANTE
+================================== */
+.floating-new-btn {
+  position: fixed; bottom: 5vh; right: 3.5vw;
+  background: #28a745; color: #fff; border: none; padding: 10px 25px;
+  border-radius: 15px; font-size: 1.3rem; box-shadow: 0 4px 12px rgba(0,0,0,.3);
+  z-index: 998; transition: all .3s ease;
+}
+.floating-new-btn:hover { background: #218838; transform: scale(1.05); }
+
+/* ===============================
+   4. MENSAJES (única definición)
+================================== */
+
+.message-box {
+  position: fixed;
+  top: 15vh;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  z-index: 2000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  background-color: #eff7ff;
+  border: 2px solid #93ccfd;
+  text-align: center;
+  color: #00234b;
+  opacity: 0;
+  animation: fadeInMessage 0.3s ease-out forwards;
+}
+
+.message-boxs {
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  left: 140px;
+
+  background-color: #eff7ff;
+  border: 2px solid #93ccfd;
+  color: #00234b;            
+  font-weight: 600;
+  font-size: 1.2rem;
+  text-align: center;
+  font-weight: bold;
+
+  padding: 2rem 3rem;
+  border-radius: 20px;
+  margin: 1rem auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, .08);
+
+  max-width: 400px;
+
+  animation: fadeInMessage 0.3s ease-out forwards;
+}
+
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -15px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+.message-box.success { background: #eaffea; border: 2px solid #a7e6af; color: #155724; }
+.message-box.error { background: #fff0f0; border: 2px solid #f5c6cb; color: #b00020; }
+.message-box.warning {
+  background: #fff8e1; border: 2px solid #ffcc00; color: #6b4c00;
+  top: 10%; font-size: 1.3rem; z-index: 5000; display: flex; flex-direction: column; align-items: center;
+}
+.icon-container { margin-bottom: 1rem; }
+.icon-mess { width: 5rem; height: 5rem; object-fit: contain; display: block; margin: 0 auto 1rem; }
+
+@keyframes fadeInOut {
+  0% { opacity: 0; transform: translate(-50%, -15px); }
+  10%,90% { opacity: 1; transform: translate(-50%, 0); }
+  100% { opacity: 0; transform: translate(-50%, -10px); }
+}
+
+/* ===============================
+   5. MODALES (Detalle / Confirmación)
+================================== */
+#confirm-backdrop, #detail-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5); backdrop-filter: blur(5px);
+  display: flex; justify-content: center; align-items: center; z-index: 4000; animation: fadeInConfirm .35s ease-out forwards;
+}
+@keyframes fadeInConfirm { from { opacity: 0; } to { opacity: 1; } }
+
+#confirm-modal, #detail-modal {
+  background: #eff7ff; border-radius: 20px; padding: 0; margin: 0 1rem;
+  width: 45vw; max-width: 600px; transform: scale(.9); animation: scaleInConfirm .35s ease-out forwards;
+  box-shadow: 0 12px 36px rgba(0,0,0,.3);
+}
+@keyframes scaleInConfirm {
+  from { transform: scale(.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+#confirm-header, #detail-header {
+  display: flex; justify-content: center; align-items: center; padding: 1rem 1.2rem;
+  color: #fff; font-weight: bold; font-size: 2rem; position: relative;
+  border-top-left-radius: 20px; border-top-right-radius: 20px;
+}
+#confirm-header { background: #d32f2f; }
+#detail-header { background: #0d47a1; }
+
+#confirm-close-btn, #detail-close-btn {
+  position: absolute; right: 1rem; top: 50%;
+  transform: translateY(-50%); background: transparent; border: none;
+  font-size: 2rem; color: #fff; cursor: pointer;
+}
+
+#confirm-body, #detail-body {
+  padding: 0 20px 20px 20px; border-radius: 0 0 20px 20px; box-sizing: border-box; font-size: 1.6rem;
+}
+#confirm-body { background: #fff5f5; color: #2d0000; text-align: center; }
+#detail-body { background: #eff7ff; color: #00234b; text-align: left; }
+#detail-body p { margin-bottom: 1rem; word-break: break-word; }
+
+/* ===============================
+   6. BOTONES DEL MODAL DE CONFIRMACIÓN
+================================== */
+#confirm-buttons { margin-top: 2rem; display: flex; justify-content: center; gap: 1.5rem; }
+#confirm-buttons .btn-green, #confirm-buttons .btn-yellow {
+  padding: .9rem 2rem; border-radius: 12px; font-size: 1rem; cursor: pointer; border: none; font-weight: 600; transition: .3s;
+}
+#confirm-buttons .btn-green { background: #d32f2f; color: #fff; }
+#confirm-buttons .btn-green:hover { background: #b71c1c; transform: translateY(-2px); }
+#confirm-buttons .btn-yellow { background: #ffc107; color: #212529; }
+#confirm-buttons .btn-yellow:hover { background: #e0a800; transform: translateY(-2px); }
+
+/* ===============================
+   7. FILTRO EN ENCABEZADO
+================================== */
+.header-top {
+  display: flex; justify-content: space-between; align-items: flex-end; flex-wrap: wrap;
+  margin: 1.5rem 70px 0 70px;
+}
+.header-info { flex: 1; }
+.header-filters { display: flex; align-items: center; gap: 1rem; margin-top: .5rem; }
+.filter-container { display: flex; flex-direction: column; align-items: flex-start; }
+.filter-container label { font-weight: bold; margin-bottom: 5px; color: #00234b; }
+.styled-select {
+  padding: 8px 12px; border-radius: 10px; border: 1px solid #aacbee; font-size: 1rem; background: #fff; color: #00234b; width: 200px;
+}
+.styled-select:focus { outline: none; border-color: #007bff; box-shadow: 0 0 6px rgba(0,123,255,.2); }
+
+/* ===============================
+   8. TOTAL CONTROL
+================================== */
+.total-control { display: flex; align-items: center; gap: 8px; }
+.plus-minus-btn {
+  background: #007bff; color: #fff; border: none; padding: 2px 8px; border-radius: 10px;
+  cursor: pointer; font-size: 1.2rem; transition: background-color .2s;
+}
+.plus-minus-btn:hover { background: #0056b3; }
+.plus-minus-btn:disabled { opacity: .6; cursor: not-allowed; }
+.plus-minus-btn:disabled:hover { background: #007bff; }
+
+/* ===============================
+   9. ICONOS DE ESTADO
+================================== */
+.icon-warning-float { width: 35px; height: 35px; margin-bottom: 10px; animation: fadeInIcon 5s ease-out, pulse 1s infinite ease-in-out; }
+.icon-warning-inline { width: 30px; height: 30px; margin: auto; animation: pulse 1s infinite ease-in-out; }
+@keyframes fadeInIcon {
+  0% { opacity: 0; transform: translateY(-10px); }
+  10%,90% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-5px); }
+}
+@keyframes pulse { 0%{transform:scale(1)} 50%{transform:scale(1.25)} 100%{transform:scale(1)} }
+
+/* ===============================
+   10. BANNER DE ALERTA EN MODAL
+================================== */
+.warning-inline{
+  display:center; align-items:center; gap:.6rem;
+  background:#fff6db; border:2px solid #f0d38a; color:#5c4a00; font-weight:600; text-align:center;
+  padding:.75rem 1rem; border-radius:10px; margin:20px 0 0 0; box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+.warning-inline img{ width:22px; height:22px; margin: -5px; flex:0 0 auto; filter:drop-shadow(0 1px 1px rgba(0,0,0,.1)); }
+
+/* ===============================
+   11. RESPONSIVE
+================================== */
+@media screen and (max-width: 768px) {
+  .view-header { width: 100%; margin: 1rem auto; text-align: center; }
+  .list-container { width: 95vw; margin: 1rem auto; height: auto; padding: 2%; }
+  .card-row { flex-direction: column; align-items: flex-start; justify-content: space-between; }
+  .card-actions { justify-content: flex-start; margin-left: 20px; }
+  .floating-new-btn { bottom: 3vh; right: 3vw; padding: 8px 20px; font-size: 1rem; }
+  #confirm-modal, #detail-modal { width: 90vw; }
+}
+@media screen and (max-width: 480px) {
+  .message-box { top: 5vh; font-size: .9rem; padding: 1rem 1.5rem; }
+  .view-header h1 { font-size: 1.4rem; }
+  .view-header p { font-size: .9rem; }
+}

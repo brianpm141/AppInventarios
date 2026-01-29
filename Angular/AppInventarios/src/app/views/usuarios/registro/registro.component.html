@@ -1,0 +1,119 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="regresar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      {{ usuarioToEdit ? 'Editar Usuario' : 'Nuevo Usuario' }}
+      <button class="close-btn" (click)="regresar()">×</button>
+    </div>
+    <div class="form-container">
+      <form [formGroup]="registroForm" (ngSubmit)="registrarUsuario()">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" formControlName="nombre" placeholder="Nombre" />
+            <div *ngIf="registroForm.get('nombre')?.invalid && registroForm.get('nombre')?.touched" class="error">
+              <small>Nombre es requerido</small>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="apellidos">Apellidos</label>
+            <input id="apellidos" formControlName="apellidos" placeholder="Apellidos" />
+            <div *ngIf="registroForm.get('apellidos')?.invalid && registroForm.get('apellidos')?.touched" class="error">
+              <small>Apellidos son requeridos</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="usuario">Usuario</label>
+            <input id="usuario" formControlName="usuario" placeholder="Nombre de usuario" />
+            <div *ngIf="registroForm.get('usuario')?.invalid && registroForm.get('usuario')?.touched" class="error">
+              <small>Usuario es requerido</small>
+            </div>
+          </div>
+          <div class="form-group abbreviation">
+            <label for="rol">Rol</label>
+            <select id="rol" formControlName="rol">
+              <option [value]="0" disabled>Seleccione...</option>
+              <option [value]="1">Administrador</option>
+              <option [value]="2">Usuario</option>
+            </select>
+            <div *ngIf="registroForm.get('rol')?.invalid && registroForm.get('rol')?.touched" class="error">
+              <small>Rol es requerido</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="position: relative;">
+            <label for="contrasena">Contraseña</label>
+            <input
+              id="contrasena"
+              [type]="mostrarContrasena ? 'text' : 'password'"
+              formControlName="contrasena"
+              placeholder="Contraseña" />
+            <button
+              type="button"
+              tabindex="-1"
+              (click)="mostrarContrasena = !mostrarContrasena"
+              style="position: absolute; top: 35px; right: 10px; background: none; border: none;">
+              <img [src]="'/img/' + (mostrarContrasena ? 'ver.png' : 'esconder.png')" style="width: 25px;" />
+            </button>
+            <div *ngIf="registroForm.get('contrasena')?.touched && registroForm.get('contrasena')?.errors" class="error">
+              <small *ngIf="registroForm.get('contrasena')?.errors?.['required']">Contraseña es requerida</small>
+              <small *ngIf="registroForm.get('contrasena')?.errors?.['minlength']">Debe tener al menos 6 caracteres</small>
+              <small *ngIf="registroForm.get('contrasena')?.errors?.['pattern']">
+                Debe contener una mayúscula y un símbolo
+              </small>
+            </div>
+          </div>
+
+          <div class="form-group" style="position: relative;">
+            <label for="confirmar">Confirmar contraseña</label>
+            <input
+              id="confirmar"
+              [type]="mostrarConfirmar ? 'text' : 'password'"
+              formControlName="confirmar"
+              placeholder="Confirmar contraseña" />
+            <button
+              type="button"
+              tabindex="-1"
+              (click)="mostrarConfirmar = !mostrarConfirmar"
+              style="position: absolute; top: 35px; right: 10px; background: none; border: none;">
+              <img [src]="'/img/' + (mostrarConfirmar ? 'ver.png' : 'esconder.png')" style="width: 25px;" />
+            </button>
+            <div *ngIf="registroForm.get('confirmar')?.touched && registroForm.get('confirmar')?.errors" class="error">
+              <small *ngIf="registroForm.get('confirmar')?.errors?.['required']">Confirmación es requerida</small>
+              <small *ngIf="registroForm.get('confirmar')?.errors?.['minlength']">Debe tener al menos 6 caracteres</small>
+              <small *ngIf="registroForm.get('confirmar')?.errors?.['pattern']">
+                Debe contener una mayúscula y un símbolo
+              </small>
+            </div>
+            <div *ngIf="!contraseniasCoinciden && registroForm.get('confirmar')?.touched" class="error">
+              <small>Las contraseñas no coinciden</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-buttons">
+          <button type="button" class="btn-yellow" (click)="regresar()">Regresar</button>
+          <button type="submit" class="btn-green">{{ usuarioToEdit ? 'Actualizar' : 'Guardar' }}</button>
+        </div>
+      </form>
+
+      <div *ngIf="mensajeExito" class="message-box success">
+        <div class="icon-container">
+          <img src="img/suc.png" class="icon-mess" />
+        </div>
+        Usuario {{ usuarioToEdit ? 'actualizado' : 'creado' }} exitosamente
+      </div>
+
+      <div *ngIf="mensajeError" class="message-box error">
+        <div class="icon-container">
+          <img src="img/error.png" class="icon-mess" />
+        </div>
+        {{ messageText || 'Completa todos los campos obligatorios' }}
+      </div>
+    </div>
+  </div>
+</div>

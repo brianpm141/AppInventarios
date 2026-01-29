@@ -1,0 +1,132 @@
+.sidebar-wrapper {
+  margin-top: 3vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  height: 100%;
+  z-index: 998;
+}
+
+.sidebar-container {
+  width: 250px;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  background-color: #f0f7ff;
+}
+
+.sidebar-collapsed {
+  width: 60px;
+}
+
+.menu-toggle {
+  height: 5vh;
+  width: 5vh;
+  margin-top: 60px;
+  margin-left: 230px;
+  border-radius: 50%;
+  border: none;
+  background-color: #bfddfe;
+  color: #1e49af;
+  font-size: 2vh;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  z-index: 999;
+}
+
+.menu-toggle:hover {
+  transform: translateX(-10%) scale(0.9);
+}
+
+.nav-table {
+  margin: 6vh auto 0 auto;
+  width: 80%;
+  height: 55%;
+}
+
+.nav-table td {
+  align-items: center;
+  justify-content: center;
+  vertical-align: middle;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: transparent;
+  color: #172954;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  font-size: max(14px, 1vw);
+  cursor: pointer;
+  text-align: left;
+  width: 100%;
+  padding: 6px 12px;
+  transition: all 0.3s ease;
+  flex-wrap: wrap;
+  word-break: break-word;
+}
+
+.nav-btn img.icon {
+  height: 1.3vw;
+  width: auto;
+  transition: transform 0.3s ease;
+  min-height: 20px;
+}
+
+.sidebar-collapsed .nav-btn span.text-label {
+  display: none;
+}
+
+.nav-btn:hover {
+  color: #1e4aaf;
+  border: 1px solid #1e4aaf;
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn:hover img.icon {
+  transform: scale(1.15);
+}
+
+.nav-btn.active {
+  background-color: #dbebfe;
+  border: 1px solid #256feb;
+  border-style: outset;
+  color: #1e49af;
+  transform: scale(1.06);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.nav-btn.active img.icon {
+  transform: scale(1.25);
+}
+
+.line {
+  height: 1px;
+  width: 85%;
+  background-color: #7c7c7c;
+}
+
+.settings-icon {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 35px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.settings-icon:hover {
+  transform: translateX(-50%) scale(1.2);
+}
+
+.logout-container {
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
+  text-align: center;
+}

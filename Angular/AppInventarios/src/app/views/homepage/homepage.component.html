@@ -1,0 +1,53 @@
+
+<div class="container">
+  <div class="grid">
+    <button class="card" routerLink="/devices">
+      <img src="gif/equip.gif" alt="Equipos" />
+      <span>Equipos</span>
+    </button>
+
+    <button class="card" routerLink="/accessories">
+      <img src="gif/sup.gif" alt="Accesorios" />
+      <span>Accesorios</span>
+    </button>
+
+    <button class="card" routerLink="/formatos">
+      <img src="gif/form.gif" alt="Formatos" />
+      <span>Responsivas y Mantenimientos</span>
+    </button>
+
+    @if (role == 1){
+    <button class="card" routerLink="/areas">
+      <img src="gif/areas.gif" alt="Áreas" />
+      <span>Pisos y Áreas</span>
+    </button>
+
+    <button class="card" routerLink="/departments">
+      <img src="gif/department.gif" alt="Departamentos" />
+      <span>Departamentos</span>
+    </button>
+  }
+
+    @if (role === 2 || role === 1){
+      <button class="card" routerLink="/stadistics">
+        <img src="gif/reports.gif" alt="Reportes" />
+        <span>Reportes</span>
+      </button>
+    }
+
+    @if (role === 1){
+
+    <button class="card" routerLink="/usuarios">
+      <img src="gif/users.gif" alt="Usuarios" />
+      <span>Usuarios</span>
+    </button>
+
+    <button class="card" routerLink="/history">
+      <img src="gif/history.gif" alt="Historial" />
+      <span>Historial de movimientos</span>
+    </button>
+    }
+
+  </div>
+</div>
+

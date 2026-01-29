@@ -1,0 +1,170 @@
+/* Contenedor de resumen */
+.summary-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.summary-card {
+  background: #f0f7ff;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 150px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Contenedor de filtros */
+.filters-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* Custom checkbox style */
+.container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+}
+
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  --clr: #0B6E4F;
+  position: relative;
+  height: 1.3em;
+  width: 1.3em;
+  background-color: #ccc;
+  border-radius: 50%;
+  transition: 300ms;
+  margin-right: 0.5rem;
+}
+
+.container input:checked ~ .checkmark {
+  background-color: var(--clr);
+  border-radius: 0.5rem;
+  animation: pulse 500ms ease-in-out;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.container .checkmark:after {
+  left: 0.45em;
+  top: 0.25em;
+  width: 0.25em;
+  height: 0.5em;
+  border: solid #E0E0E2;
+  border-width: 0 0.15em 0.15em 0;
+  transform: rotate(45deg);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 #0B6E4F90;
+    rotate: 20deg;
+  }
+  50% {
+    rotate: -20deg;
+  }
+  75% {
+    box-shadow: 0 0 0 10px #0B6E4F60;
+  }
+  100% {
+    box-shadow: 0 0 0 13px #0B6E4F30;
+    rotate: 0;
+  }
+}
+
+/* Contenedor de acciones */
+.actions-container {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.actions-container button {
+  background-color: #0B6E4F;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.actions-container button:hover {
+  background-color: #07523c;
+}
+
+/* Tabla */
+.devices-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.devices-table th, .devices-table td {
+  border: 1px solid #ddd;
+  padding: 0.5rem;
+  text-align: left;
+}
+
+.devices-table th {
+  background: #f0f7ff;
+}
+
+/* Mismo efecto de relleno por --fill usado en Accesorios */
+.summary-card {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.05) var(--fill, 0%),
+      transparent var(--fill, 0%)
+    ),
+    #f0f7ff; /* fallback */
+  transition: background 1s ease;
+}
+
+/* Paleta consistente */
+.summary-card.primary {        /* Total Equipos */
+  background-color: #e6f2ff;
+  border-left: 5px solid #007acc;
+}
+.summary-card.success {        /* Asignados */
+  background-color: #e8f7ef;
+  border-left: 5px solid #0b6e4f;
+}
+.summary-card.info {           /* Resguardo */
+  background-color: #eaf2ff;
+  border-left: 5px solid #1e4aaf;
+}
+.summary-card.danger {         /* Baja */
+  background-color: #ffe5e5;
+  border-left: 5px solid #f44336;
+}
+.summary-card.new {            /* Nuevos */
+  background-color: #efeaff;
+  border-left: 5px solid #6a5acd;
+}
+.summary-card.neutral {        /* Usados */
+  background-color: #f4f6f8;
+  border-left: 5px solid #90a4ae;
+}

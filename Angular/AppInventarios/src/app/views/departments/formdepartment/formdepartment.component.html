@@ -1,0 +1,74 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="onClose()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ departmentToEdit ? 'Editar departamento' : 'Crear departamento' }}</h2>
+      <button class="close-btn" (click)="onClose()">×</button>
+    </div>
+
+    <div class="form-container">
+      <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()">
+
+        <!-- Fila de 3 campos -->
+        <div class="form-row single-row">
+          <!-- Nombre -->
+          <div class="form-group">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" formControlName="name"
+              [class.input-error]="departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched" />
+            <div class="error-message" *ngIf="departmentForm.get('name')?.hasError('required') && departmentForm.get('name')?.touched">
+              Campo obligatorio
+            </div>
+            <div class="error-message" *ngIf="departmentForm.get('name')?.hasError('duplicate') && departmentForm.get('name')?.touched">
+              ⚠️ Ya existe un departamento con este nombre.
+            </div>
+          </div>
+
+          <!-- Líder -->
+          <div class="form-group">
+            <label for="department_head">Líder</label>
+            <input id="department_head" type="text" formControlName="department_head"
+              [class.input-error]="departmentForm.get('department_head')?.invalid && departmentForm.get('department_head')?.touched" />
+            <div class="error-message" *ngIf="departmentForm.get('department_head')?.hasError('required') && departmentForm.get('department_head')?.touched">
+              Campo obligatorio
+            </div>
+          </div>
+
+          <!-- Abreviatura -->
+          <div class="form-group">
+            <label for="abbreviation">Abreviatura</label>
+            <input id="abbreviation" type="text" formControlName="abbreviation" maxlength="4"
+              (input)="convertirAMayusculas($event)"
+              [class.input-error]="departmentForm.get('abbreviation')?.invalid && departmentForm.get('abbreviation')?.touched" />
+            <div class="error-message" *ngIf="departmentForm.get('abbreviation')?.hasError('required') && departmentForm.get('abbreviation')?.touched">
+              Campo obligatorio
+            </div>
+            <div class="error-message" *ngIf="departmentForm.get('abbreviation')?.hasError('maxlength') && departmentForm.get('abbreviation')?.touched">
+              Máximo 4 caracteres
+            </div>
+            <div class="error-message" *ngIf="departmentForm.get('abbreviation')?.hasError('duplicate') && departmentForm.get('abbreviation')?.touched">
+              ⚠️ Ya existe un departamento con esta abreviatura.
+            </div>
+          </div>
+        </div>
+
+        <!-- Fila de descripción -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="description">Descripción</label>
+            <textarea id="description" formControlName="description"
+              [class.input-error]="departmentForm.get('description')?.invalid && departmentForm.get('description')?.touched"></textarea>
+            <div class="error-message" *ngIf="departmentForm.get('description')?.hasError('required') && departmentForm.get('description')?.touched">
+              Campo obligatorio
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones -->
+        <div class="form-buttons">
+          <button type="button" class="btn-yellow" (click)="onClose()">Cancelar</button>
+          <button type="submit" class="btn-green">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

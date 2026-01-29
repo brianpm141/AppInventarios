@@ -1,0 +1,134 @@
+<!-- Encabezado -->
+<div class="view-header">
+  <h1>Gestión de Usuarios</h1>
+  <p>Visualiza, registra y administra los usuarios del sistema.</p>
+</div>
+
+<!-- Filtros -->
+<div class="header-filters">
+  <div class="filter-container">
+    <label for="filtroRol">Rol:</label>
+    <select
+      id="filtroRol"
+      [(ngModel)]="roleFilter"
+      (change)="applyFilters()"
+      class="styled-select"
+    >
+      <option [ngValue]="'todos'">Todos</option>
+      <option [ngValue]="1">Administrador</option>
+      <option [ngValue]="2">Usuario</option>
+    </select>
+  </div>
+
+  <div class="filter-container">
+    <label for="miniSearch">Búsqueda:</label>
+    <input
+      id="miniSearch"
+      type="text"
+      class="mini-search"
+      placeholder="Nombre, Apellido o Usuario"
+      [(ngModel)]="searchTerm"
+      (input)="applyFilters()"
+      (keyup.enter)="buscarYResaltar(searchTerm, { openDetails: true })"
+    />
+  </div>
+</div>
+
+<!-- Modal de registro -->
+<app-registro
+  *ngIf="showModal"
+  [isVisible]="showModal"
+  [usuarioToEdit]="usuarioSeleccionado"
+  (closed)="cerrarModal()"
+  (created)="onCreated()">
+</app-registro>
+
+<!-- Confirmación de eliminación -->
+<div *ngIf="showConfirmModal" id="confirm-backdrop">
+  <div id="confirm-modal" (click)="$event.stopPropagation()">
+    <div id="confirm-header">
+      <h2>Confirmar Eliminación</h2>
+      <button id="confirm-close-btn" (click)="cancelarEliminacion()">×</button>
+    </div>
+    <div id="confirm-body">
+      <div *ngIf="usuarioAEliminar?.id === 1" class="message-box error" style="margin-bottom:12px">
+        <div class="icon-container"><img src="img/error.png" class="icon-mess" /></div>
+        No es posible eliminar al usuario administrador.
+      </div>
+      <p>
+        ¿Está seguro que desea eliminar al usuario
+        <strong>{{ usuarioAEliminar?.nombre }} {{ usuarioAEliminar?.apellidos }}</strong>?
+      </p>
+      <div id="confirm-buttons">
+        <button class="btn-yellow" (click)="cancelarEliminacion()">Cancelar</button>
+        <button class="btn-green" *ngIf="usuarioAEliminar?.id !== 1" (click)="confirmarEliminacion()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Detalle de usuario -->
+<div *ngIf="showDetailModal" id="detail-backdrop" (click)="cerrarDetalle()">
+  <div id="detail-modal" (click)="$event.stopPropagation()">
+    <div id="detail-header">
+      Detalles del usuario
+      <button id="detail-close-btn" (click)="cerrarDetalle()">×</button>
+    </div>
+    <div id="detail-body">
+      <p><strong>Nombre:</strong> {{ usuarioSeleccionado?.nombre }} {{ usuarioSeleccionado?.apellidos }}</p>
+      <p><strong>Usuario:</strong> {{ usuarioSeleccionado?.usuario }}</p>
+      <p><strong>Rol:</strong> {{ obtenerNombreRol(usuarioSeleccionado?.role || 0) }}</p>
+    </div>
+  </div>
+</div>
+
+<!-- Mensaje si no hay usuarios -->
+<div *ngIf="usuarios.length === 0" class="message-box">
+  No se detectaron usuarios registrados.
+</div>
+
+<!-- Lista de usuarios -->
+<div class="list-container">
+  <div class="list-content" #scrollContainer>
+    <div
+      class="item-card"
+      *ngFor="let usr of filteredUsuarios; trackBy: trackById"
+      #itemRow
+      [attr.data-id]="usr.id"
+      [class.selected]="usr === usuarioSeleccionado"
+      (click)="mostrarDetalles(usr)">
+
+      <div class="card-row">
+        <div class="card-info">
+          <div><strong>Usuario:</strong> {{ usr.usuario }}</div>
+          <div><strong>Nombre:</strong> {{ usr.nombre }} {{ usr.apellidos }}</div>
+        </div>
+
+        <!-- Acciones para usuarios normales -->
+        <div class="card-actions" *ngIf="usr.id !== 1">
+          <button
+            class="action-btn"
+            title="Editar"
+            (click)="abrirEditar(usr); $event.stopPropagation()">
+            <img src="icons/editar.png" class="icon-action" />
+          </button>
+          <button
+            class="action-btn"
+            title="Eliminar"
+            (click)="openConfirmDelete(usr); $event.stopPropagation()">
+            <img src="icons/borrar.png" class="icon-action" />
+          </button>
+        </div>
+
+        <!-- Candado para admin protegido -->
+        <div class="card-actions" *ngIf="usr.id === 1" title="Usuario administrador protegido">
+          <img src="icons/candado.png" class="icon-actions" style="width:35px;height:35px" />
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Botón flotante -->
+<button class="floating-new-btn" (click)="abrirModal()">Nuevo Usuario</button>

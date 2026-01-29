@@ -1,0 +1,73 @@
+<div class="view-header">
+  <div class="header-top">
+    <div class="header-info">
+      <h1>Ubicaciones de Equipos</h1>
+      <p>Ubicaciones Registradas <br>Las áreas sin equipos asignados se muestran en gris</p>
+    </div>
+
+    <div class="header-filters">
+      <div class="filter-container">
+        <label for="departamento">Filtrar por departamento:</label>
+        <select id="departamento" [(ngModel)]="selectedDepartment" (change)="cargarUbicaciones(selectedDepartment || undefined)">
+          <option [ngValue]="null">Todos</option>
+          <option *ngFor="let dept of departamentos" [ngValue]="dept.id">{{ dept.name }}</option>
+        </select>
+      </div>
+
+      <div class="filter-container">
+        <label for="departamento">Listado de ubicaciones:</label>
+        <button class="btn-green" (click)="generarReporte()">Generar PDF</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="ubicaciones-container">
+  <div *ngFor="let piso of ubicaciones"
+       class="piso-card"
+       [ngClass]="{ 'no-devices': isPisoSinDispositivos(piso) }"
+       (click)="!isPisoSinDispositivos(piso) && togglePiso(piso)">
+
+    <div class="piso-header" [class.no-toggle]="isPisoSinDispositivos(piso)">
+      <strong>{{ piso.name }}</strong>
+      <span *ngIf="!isPisoSinDispositivos(piso)">{{ piso.expanded ? '▲' : '▼' }}</span>
+    </div>
+
+    <div [ngClass]="{ 'collapse-hidden': !piso.expanded }" class="equipo-list">
+      <div *ngFor="let area of piso.areas"
+           class="area-card"
+           [ngClass]="{ 'no-devices': area.devices.length === 0 }"
+           (click)="area.devices.length > 0 && toggleArea(area, piso); $event.stopPropagation()">
+
+        <div class="area-header" [class.no-toggle]="area.devices.length === 0">
+          <strong>{{ area.name }}</strong>
+          <span *ngIf="area.devices.length > 0">{{ area.expanded ? '▲' : '▼' }}</span>
+        </div>
+
+        <div [ngClass]="{ 'collapse-hidden': !area.expanded }" class="equipo-list">
+    <div [ngClass]="{ 'collapse-hidden': !area.expanded }" class="equipo-list">
+  <div *ngFor="let grupo of objectKeys(area.groupedDevices)">
+  <div class="departamento-header">
+    <strong>Grupo: {{ grupo }}</strong>
+  </div>
+
+  <div *ngFor="let device of area.groupedDevices[grupo]" class="equipo-row">
+    <span>{{ device.brand }} - {{ device.model }}</span>
+    <span>{{ device.responsable }}</span>
+  </div>
+</div>
+
+</div>
+
+    </div>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="ubicaciones.length === 0">
+    <p>No se encontraron ubicaciones registradas.</p>
+  </div>
+</div>

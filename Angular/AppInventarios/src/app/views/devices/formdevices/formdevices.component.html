@@ -1,0 +1,152 @@
+<div class="modal-backdrop" *ngIf="isVisible" (click)="cerrar()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <div class="modal-header">
+      <h2>{{ deviceToEdit ? 'Editar equipo' : 'Registrar equipo' }}</h2>
+      <span
+        *ngIf="deviceToEdit?.func"
+        [ngClass]="{
+          'tag-status': true,
+          'asignado': deviceToEdit.func === 'asignado',
+          'resguardo': deviceToEdit.func === 'resguardo',
+          'baja': deviceToEdit.func === 'baja'
+        }"
+      >
+        {{ deviceToEdit.func | titlecase }}
+      </span>
+      <button class="close-btn" (click)="cerrar()">×</button>
+    </div>
+
+    <div class="form-container">
+      <form [formGroup]="deviceForm" (ngSubmit)="guardar()">
+
+        <!-- fila marca / modelo -->
+        <div class="form-row single-row">
+          <div class="form-group">
+            <label for="brand">Marca</label>
+            <input id="brand" type="text" formControlName="brand" />
+            <div class="error" *ngIf="deviceForm.get('brand')?.touched && deviceForm.get('brand')?.invalid">
+              <small>Requerido</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="model">Modelo</label>
+            <input id="model" type="text" formControlName="model" />
+            <div class="error" *ngIf="deviceForm.get('model')?.touched && deviceForm.get('model')?.invalid">
+              <small>Requerido</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- fila número de serie / categoría -->
+        <div class="form-row single-row">
+          <div class="form-group">
+            <label for="serial_number">N° Serie</label>
+            <input id="serial_number" type="text" formControlName="serial_number" />
+            <div class="error" *ngIf="deviceForm.get('serial_number')?.touched && deviceForm.get('serial_number')?.invalid">
+              <small>Requerido</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="category_id">Categoría</label>
+            <select id="category_id" formControlName="category_id">
+              <option value="" disabled>Selecciona una categoría</option>
+              <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.name }}</option>
+            </select>
+            <div class="error" *ngIf="deviceForm.get('category_id')?.touched && deviceForm.get('category_id')?.invalid">
+              <small>Requerido</small>
+            </div>
+          </div>
+        </div>
+
+        <!-- toggle para is_new -->
+        <div class="form-row single-row">
+          <div class="form-group">
+            <label for="is_new">¿Equipo nuevo?</label>
+            <label class="switch">
+              <input type="checkbox" id="is_new" formControlName="is_new" />
+              <div class="slider"></div>
+              <div class="slider-card">
+                <div class="slider-card-face slider-card-front"></div>
+                <div class="slider-card-face slider-card-back"></div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+
+        <!-- campo observaciones -->
+        <div class="form-row single-row">
+          <div class="form-group">
+            <label for="details">Observaciones</label>
+            <textarea id="details" rows="3" formControlName="details"></textarea>
+          </div>
+        </div>
+
+        <!-- campos personalizados -->
+        <div class="form-row" *ngIf="camposPersonalizados.length > 0">
+          <div class="form-group" *ngFor="let campo of camposPersonalizados">
+            <label [for]="'campo_' + campo.id">{{ campo.name }}</label>
+
+            <ng-container [ngSwitch]="campo.data_type">
+              <input
+                *ngSwitchCase="'text'"
+                type="text"
+                class="form-control"
+                [formControlName]="'custom_' + campo.id"
+                [id]="'campo_' + campo.id"
+              />
+
+              <input
+                *ngSwitchCase="'number'"
+                type="number"
+                class="form-control"
+                [formControlName]="'custom_' + campo.id"
+                [id]="'campo_' + campo.id"
+              />
+
+              <input
+                *ngSwitchCase="'date'"
+                type="date"
+                class="form-control"
+                [formControlName]="'custom_' + campo.id"
+                [id]="'campo_' + campo.id"
+              />
+
+              <textarea
+                *ngSwitchCase="'textarea'"
+                class="form-control"
+                [formControlName]="'custom_' + campo.id"
+                [id]="'campo_' + campo.id"
+              ></textarea>
+
+              <input
+                *ngSwitchDefault
+                type="text"
+                class="form-control"
+                [formControlName]="'custom_' + campo.id"
+                [id]="'campo_' + campo.id"
+              />
+            </ng-container>
+
+            <!-- Validación solo si es requerido -->
+            <div
+              class="error"
+              *ngIf="campo.required && deviceForm.get('custom_' + campo.id)?.touched && deviceForm.get('custom_' + campo.id)?.invalid"
+            >
+              <small>Campo obligatorio</small>
+            </div>
+          </div>
+        </div>
+
+
+        <!-- botones -->
+        <div class="form-buttons">
+          <button type="button" class="btn-yellow" (click)="cerrar()">Cancelar</button>
+          <button type="submit" class="btn-green">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

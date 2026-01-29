@@ -1,0 +1,105 @@
+<div class="sidebar-wrapper">
+  <div class="sidebar-container" [class.sidebar-collapsed]="!sidebarVisible()">
+    <!-- 
+    <button class="menu-toggle" (click)="toggleSidebar()">
+      {{ sidebarVisible() ? '❮' : '❯' }}
+    </button>
+    -->
+    <table class="nav-table">
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/devices" routerLinkActive="active">
+            <img src="icons/pc.png" class="icon" />
+            <span class="text-label">Equipos</span>
+          </button>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/accessories" routerLinkActive="active">
+            <img src="icons/usb.png" class="icon" />
+            <span class="text-label">Accesorios</span>
+          </button>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/formatos" routerLinkActive="active">
+            <img src="icons/list.png" class="icon" />
+            <span class="text-label">Responsivas y<br> Mantenimiento</span>
+          </button>
+        </td>
+      </tr>
+
+      <tr><td><div class="line"></div></td></tr>
+
+      @if ( role === 1){
+        <tr>
+          <td>
+            <button class="nav-btn" routerLink="/areas" routerLinkActive="active">
+              <img src="icons/area.png" class="icon" />
+              <span class="text-label">Pisos y Areas</span>
+            </button>
+          </td>
+        </tr>
+
+        <tr>
+          <td>
+            <button class="nav-btn" routerLink="/departments" routerLinkActive="active">
+              <img src="icons/department.png" class="icon" />
+              <span class="text-label">Departamentos</span>
+            </button>
+          </td>
+        </tr>
+
+        <tr><td><div class="line"></div></td></tr>
+      }
+
+    @if (role === 1 || role === 2){
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/stadistics" routerLinkActive="active">
+            <img src="icons/rep.png" class="icon" />
+            <span class="text-label">Reportes e <br> Inventarios </span>
+          </button>
+        </td>
+      </tr>
+    }
+
+    @if (role === 1){
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/usuarios" routerLinkActive="active">
+            <img src="icons/user.png" class="icon" />
+            <span class="text-label">Usuarios</span>
+          </button>
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/history" routerLinkActive="active">
+            <img src="icons/hist.png" class="icon" />
+            <span class="text-label">Historial de <br> movimientos</span>
+          </button>
+        </td>
+      </tr>
+    }
+
+
+
+      <tr>
+        <td>
+          <button class="nav-btn" routerLink="/settings" routerLinkActive="active">
+            <img src="icons/settings.png" class="icon" />
+            <span class="text-label">Configuracion</span>
+          </button>
+        </td>
+      </tr>
+
+    </table>
+
+  </div>
+</div>
