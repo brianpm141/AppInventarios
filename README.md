@@ -2,13 +2,6 @@
 
 Una solución integral para la administración y control de activos, desarrollada con las últimas tecnologías web para garantizar rendimiento y escalabilidad.
 
-![Reportes](./Capturas/Reportes.png)
-
-## Requisitos Previos
-
-*   **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: Necesario para ejecutar la aplicación.
-
-
 ## 📋 Descripción General
 
 Este proyecto es una aplicación web robusta diseñada para facilitar el seguimiento de inventarios, asignación de equipos y gestión de ubicaciones. Combina un frontend moderno y reactivo construido con **Angular 19** y una API RESTful eficiente en **Node.js (Express v5)** con persistencia en **MySQL**.
@@ -62,6 +55,9 @@ Este proyecto es una aplicación web robusta diseñada para facilitar el seguimi
 |:---:|:---:|
 | ![Ubicaciones](./Capturas/Ubicaciones.png) | ![Equipos](./Capturas/equipos.png) |
 
+**Generacion de reportes**
+![Reportes](./Capturas/Reportes.png)
+
 ## 📂 Estructura del Proyecto
 
 ```bash
@@ -80,6 +76,11 @@ AplicacioInventarios/
 
 
 ## Ejecución
+
+### Requisitos Previos
+
+*   **[Docker Desktop](https://www.docker.com/products/docker-desktop/)**: Necesario para ejecutar la aplicación.
+
 
 Para levantar la aplicación, abre una terminal en la raíz del proyecto y ejecuta:
 
